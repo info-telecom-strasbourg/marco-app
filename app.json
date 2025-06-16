@@ -24,6 +24,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "La marco souhaiterait scanner un QRCode",
+          "recordAudioAndroid": false
+        }
+      ]
+    ]
   }
 }
