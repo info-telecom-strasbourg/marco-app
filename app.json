@@ -32,7 +32,9 @@
           "cameraPermission": "La marco souhaiterait scanner un QRCode",
           "recordAudioAndroid": false
         }
-      ]
+      ],
+      "expo-router",
+      "expo-secure-store"
     ]
   }
 }
