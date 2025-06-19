@@ -4,7 +4,7 @@ import { CameraView, useCameraPermissions, type CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export default function App() {
+export default function ScanPage() {
   const [facingDirection, setFacingDirection] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
 
