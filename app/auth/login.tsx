@@ -2,10 +2,13 @@ import { Pressable, SafeAreaView, StyleSheet, Text, TextInput } from "react-nati
 import { ToastAndroid } from "react-native";
 
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 function LoginForm() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+  const navigation = useNavigation();
 
   function onLoginPress() {
     ToastAndroid.showWithGravity(
@@ -31,6 +34,10 @@ function LoginForm() {
 
       <Pressable style={styles.button} onPress={() => onLoginPress()}>
         <Text style={styles.buttonLabel}>Se connecter</Text>
+      </Pressable>
+
+      <Pressable style={styles.button} onPress={() => navigation.navigate("home")}>
+        <Text style={styles.buttonLabel}>Dev: Go to homepage</Text>
       </Pressable>
     </>
   )
