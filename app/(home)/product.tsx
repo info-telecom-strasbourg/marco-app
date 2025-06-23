@@ -1,5 +1,5 @@
 import { FlashList } from "@shopify/flash-list";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 interface APIResponse {
@@ -28,20 +28,33 @@ function Circle({ color, size }: { color: string, size: number }) {
 }
 
 function ProductCard({ product }: { product: Product }) {
+  // ToDo: Migrate package to v2 branch for new hook
+  // const [amount, setAmount] = useRecyclingState();
+
+  // Due to FlashList recycling, we have to reset the product number to 0 every time the item goes out of viewport
+  // To keep the counter up to date, a global store have to be used to track every item counter (or at least the ones we want)
+  const lastId = useRef(product.id);
+  const [amount, setAmount] = useState(0);
+  if (lastId.current != product.id) {
+    lastId.current = product.id;
+    setAmount(0);
+  }
+
   return (
-    <View>
+    <View style={style.productContainer}>
       <Circle size={40} color={product.color} />
-      <View>
-        <Text>{product.title}</Text>
-        <Text>{product.price}</Text>
+
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontSize: 16 }}>{product.title}</Text>
+        <Text style={{ fontSize: 12 }}>{product.price}</Text>
       </View>
 
       <View style={style.productAmount}>
-        <TouchableOpacity style={style.amountButton}>
+        <TouchableOpacity style={style.amountButton} onPress={() => setAmount(() => amount - 1)}>
           <Text style={style.amountButtonText}>-</Text>
         </TouchableOpacity>
-        <Text style={style.amountText}>0</Text>
-        <TouchableOpacity style={style.amountButton}>
+        <Text style={style.amountText}>{amount}</Text>
+        <TouchableOpacity style={style.amountButton} onPress={() => setAmount(() => amount + 1)}>
           <Text style={style.amountButtonText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -58,6 +71,7 @@ function ProductList({ products }: { products: Product[] }) {
       }}
       keyExtractor={(product) => product.id.toString()}
       data={products}
+      estimatedItemSize={100}
     />
   )
 }
@@ -84,8 +98,15 @@ export default function ProductPage() {
 
 const style = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     padding: 8,
     backgroundColor: 'light-gray'
+  },
+  productContainer: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 4,
+    padding: 10,
   },
   amountButton: {
     width: 30,
