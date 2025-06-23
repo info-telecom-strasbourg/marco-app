@@ -1,6 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import { useState, useEffect } from "react";
-import { Text } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 interface APIResponse {
   data: {
@@ -18,9 +18,47 @@ interface Product {
   color: string
 }
 
-function ProductComponent({ product }: { product: Product }) {
+function Circle({ color, size }: { color: string, size: number }) {
+  return <View style={{
+    backgroundColor: color,
+    height: size,
+    width: size,
+    borderRadius: size / 2
+  }}></View>
+}
+
+function ProductCard({ product }: { product: Product }) {
   return (
-    <Text>{product.title}</Text>
+    <View>
+      <Circle size={40} color={product.color} />
+      <View>
+        <Text>{product.title}</Text>
+        <Text>{product.price}</Text>
+      </View>
+
+      <View style={style.productAmount}>
+        <TouchableOpacity style={style.amountButton}>
+          <Text style={style.amountButtonText}>-</Text>
+        </TouchableOpacity>
+        <Text style={style.amountText}>0</Text>
+        <TouchableOpacity style={style.amountButton}>
+          <Text style={style.amountButtonText}>+</Text>
+        </TouchableOpacity>
+      </View>
+
+    </View>
+  )
+}
+
+function ProductList({ products }: { products: Product[] }) {
+  return (
+    <FlashList
+      renderItem={({ item }) => {
+        return <ProductCard product={item} />
+      }}
+      keyExtractor={(product) => product.id.toString()}
+      data={products}
+    />
   )
 }
 
@@ -38,11 +76,36 @@ export default function ProductPage() {
   }
 
   return (
-    <FlashList
-      renderItem={({ item }) => {
-        return <ProductComponent product={item} />
-      }}
-      data={items}
-    />
+    <View style={style.mainContainer}>
+      <ProductList products={items} />
+    </View>
   )
 }
+
+const style = StyleSheet.create({
+  mainContainer: {
+    padding: 8,
+    backgroundColor: 'light-gray'
+  },
+  amountButton: {
+    width: 30,
+    height: 30,
+    backgroundColor: '#ffa726',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  amountButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  amountText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginHorizontal: 16,
+  },
+  productAmount: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
+})
