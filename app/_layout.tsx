@@ -8,23 +8,26 @@ import SignInPage from './auth/login';
 import HomePage from './(home)/product';
 
 import ScanPage from './fouaille/scan';
+import { CartProvider } from "../src/store/cart";
 
 export default function RootLayout() {
   const Stack = createNativeStackNavigator();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="sign_in">
-        {/* Global routes */}
-        <Stack.Screen name='sign_in' component={SignInPage} />
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="sign_in">
+          {/* Global routes */}
+          <Stack.Screen name='sign_in' component={SignInPage} />
 
-        {/* Main routes (not admin) */}
-        <Stack.Screen name='home' component={HomePage} />
+          {/* Main routes (not admin) */}
+          <Stack.Screen name='home' component={HomePage} />
 
-        {/* Admin-specific routes (fouaille) */}
-        <Stack.Screen name='scan' component={ScanPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          {/* Admin-specific routes (fouaille) */}
+          <Stack.Screen name='scan' component={ScanPage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   )
 }
 

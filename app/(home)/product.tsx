@@ -1,22 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-
-interface APIResponse {
-  data: {
-    id: number,
-    product_type: string,
-    products: Product[]
-  }[]
-}
-
-interface Product {
-  id: number,
-  name: string,
-  title: string,
-  price: string,
-  color: string
-}
+import { useCart, useCartDispatch } from "../../src/store/cart";
 
 function Circle({ color, size }: { color: string, size: number }) {
   return <View style={{
@@ -27,47 +12,56 @@ function Circle({ color, size }: { color: string, size: number }) {
   }}></View>
 }
 
-function ProductCard({ product }: { product: Product }) {
-  // ToDo: Migrate package to v2 branch for new hook
-  // const [amount, setAmount] = useRecyclingState();
+function ProductCard({ article }: { article: Article }) {
+  const cart = useCart();
+  const { addArticle, removeArticle, increaseQuantity, decreaseQuantity } = useCartDispatch();
 
-  // Due to FlashList recycling, we have to reset the product number to 0 every time the item goes out of viewport
-  // To keep the counter up to date, a global store have to be used to track every item counter (or at least the ones we want)
-  const lastId = useRef(product.id);
-  const [amount, setAmount] = useState(0);
-  if (lastId.current != product.id) {
-    lastId.current = product.id;
-    setAmount(0);
-  }
+  const item = cart.items.find(item => item.article.id == article.id);
+
+  const handleAdd = () => addArticle(article);
+
+  const handleIncr = () => increaseQuantity(article.id);
+
+  const handleDecr = () => item!.quantity > 1 ? decreaseQuantity(article.id) : removeArticle(article.id)
 
   return (
     <View style={style.productContainer}>
-      <Circle size={40} color={product.color} />
+      <Circle size={40} color={article.color} />
 
       <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: 16 }}>{product.title}</Text>
-        <Text style={{ fontSize: 12 }}>{product.price}</Text>
+        <Text style={{ fontSize: 16 }}>{article.title}</Text>
+        <Text style={{ fontSize: 12 }}>{article.price}</Text>
       </View>
+
 
       <View style={style.productAmount}>
-        <TouchableOpacity style={style.amountButton} onPress={() => setAmount(() => amount - 1)}>
-          <Text style={style.amountButtonText}>-</Text>
-        </TouchableOpacity>
-        <Text style={style.amountText}>{amount}</Text>
-        <TouchableOpacity style={style.amountButton} onPress={() => setAmount(() => amount + 1)}>
-          <Text style={style.amountButtonText}>+</Text>
-        </TouchableOpacity>
+        {
+          (!item || item?.quantity == 0) ? (
+            <TouchableOpacity style={style.amountButton} onPress={handleAdd}>
+              <Text style={style.amountButtonText}>+</Text>
+            </TouchableOpacity>
+          ) : (
+            <>
+              <TouchableOpacity style={style.amountButton} onPress={handleDecr}>
+                <Text style={style.amountButtonText}>-</Text>
+              </TouchableOpacity>
+              <Text style={style.amountText}>{item?.quantity ?? 0}</Text>
+              <TouchableOpacity style={style.amountButton} onPress={handleIncr}>
+                <Text style={style.amountButtonText}>+</Text>
+              </TouchableOpacity>
+            </>
+          )
+        }
       </View>
-
     </View>
   )
 }
 
-function ProductList({ products }: { products: Product[] }) {
+function ProductList({ products }: { products: Article[] }) {
   return (
     <FlashList
       renderItem={({ item }) => {
-        return <ProductCard product={item} />
+        return <ProductCard article={item} />
       }}
       keyExtractor={(product) => product.id.toString()}
       data={products}
@@ -77,7 +71,7 @@ function ProductList({ products }: { products: Product[] }) {
 }
 
 export default function ProductPage() {
-  const [items, setItems] = useState<Product[] | null>(null);
+  const [items, setItems] = useState<Article[]>([]);
 
   useEffect(() => {
     fetch("https://fouaille.bde-tps.fr/api/product")
@@ -85,8 +79,12 @@ export default function ProductPage() {
       .then((payload: APIResponse) => setItems(payload.data[0].products))
   }, [])
 
-  if (!items) {
-    return <Text>Please wait while we fetch the products...</Text>
+  if (!items.length) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Please wait while we fetch the products...</Text>
+      </View>
+    )
   }
 
   return (
