@@ -2,13 +2,14 @@ import { FlashList } from "@shopify/flash-list";
 import { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useCart, useCartDispatch } from "../../src/store/cart";
+import { useNavigation } from "@react-navigation/native";
 
 function Circle({ color, size }: { color: string, size: number }) {
   return <View style={{
     backgroundColor: color,
     height: size,
     width: size,
-    borderRadius: size / 2
+    borderRadius: size / 2,
   }}></View>
 }
 
@@ -19,9 +20,7 @@ function ProductCard({ article }: { article: Article }) {
   const item = cart.items.find(item => item.article.id == article.id);
 
   const handleAdd = () => addArticle(article);
-
   const handleIncr = () => increaseQuantity(article.id);
-
   const handleDecr = () => item!.quantity > 1 ? decreaseQuantity(article.id) : removeArticle(article.id)
 
   return (
@@ -30,7 +29,7 @@ function ProductCard({ article }: { article: Article }) {
 
       <View style={{ flex: 1 }}>
         <Text style={{ fontSize: 16 }}>{article.title}</Text>
-        <Text style={{ fontSize: 12 }}>{article.price}</Text>
+        <Text style={{ fontSize: 12 }}>{article.price}€</Text>
       </View>
 
 
@@ -66,12 +65,27 @@ function ProductList({ products }: { products: Article[] }) {
       keyExtractor={(product) => product.id.toString()}
       data={products}
       estimatedItemSize={100}
+      ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
     />
+  )
+}
+
+function CartButton() {
+  const navigation = useNavigation();
+
+  // @ts-ignore
+  const handlePress = () => navigation.navigate("cart");
+
+  return (
+    <TouchableOpacity onPress={handlePress} style={{ padding: 10, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ color: "white" }}>Voir mon panier</Text>
+    </TouchableOpacity>
   )
 }
 
 export default function ProductPage() {
   const [items, setItems] = useState<Article[]>([]);
+  const cart = useCart();
 
   useEffect(() => {
     fetch("https://fouaille.bde-tps.fr/api/product")
@@ -90,6 +104,7 @@ export default function ProductPage() {
   return (
     <View style={style.mainContainer}>
       <ProductList products={items} />
+      {cart.items.length > 0 && <CartButton />}
     </View>
   )
 }
@@ -101,10 +116,10 @@ const style = StyleSheet.create({
     backgroundColor: 'light-gray'
   },
   productContainer: {
-    flex: 1,
+    padding: 16,
     flexDirection: "row",
-    gap: 4,
-    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 4
   },
   amountButton: {
     width: 30,
