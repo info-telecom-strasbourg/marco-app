@@ -51,6 +51,9 @@ export default function CartPage() {
     0
   );
 
+  // Prevent errors with floating point representation
+  const formattedPrice = Math.round(cartPrice * 100) / 100;
+
   return (
     <View style={style.mainContainer}>
       <FlashList
@@ -63,7 +66,7 @@ export default function CartPage() {
       />
 
       <TouchableOpacity style={{ padding: 10, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: "white" }}>Valider ma commande - {cartPrice}€</Text>
+        <Text style={{ color: "white" }}>Valider ma commande - {formattedPrice}€</Text>
       </TouchableOpacity>
     </View>
   )
