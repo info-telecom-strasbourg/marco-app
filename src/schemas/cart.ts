@@ -1,7 +1,6 @@
 import { z } from "zod/v4"
 
-import type { Product } from "./data/product"
-import { ProductSchema } from "./data/product"
+import { ProductSchema } from "@/schemas/fouaille/product"
 
 export const CartItemSchema = z.object({
   product: ProductSchema,
