@@ -30,7 +30,5 @@ export const MeSchema = z.object({
   email_verified_at: z.coerce.date(),
 })
 
-
-
 export type User = z.infer<typeof UserSchema>;
 export type Me = z.infer<typeof MeSchema>;

@@ -2,29 +2,20 @@ import { Pressable, SafeAreaView, StyleSheet, Text, TextInput } from "react-nati
 import { ToastAndroid } from "react-native";
 
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "@/auth/useAuth";
 
 function LoginForm() {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const { signIn } = useAuth();
 
-  const navigation = useNavigation();
+  const [username, setUsername] = useState<string>('admin@local.dev');
+  const [password, setPassword] = useState<string>('pekorapeko');
 
   function onLoginPress() {
     ToastAndroid.showWithGravity(
       `Log in using credentials: ${username} - ${password}`, 2, 0);
 
-    const query = fetch("https://app-pprd.its-tps.fr/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email: username, password })
-    });
-
-    query
-      .then(res => res.text())
-      .then(payload => ToastAndroid.showWithGravity(payload, 2, 0))
+    signIn({ email: username, password })
+      .then(payload => ToastAndroid.showWithGravity(`Connected as ${payload.user}`, 2, 0))
   }
 
   return (
@@ -36,7 +27,7 @@ function LoginForm() {
         <Text style={styles.buttonLabel}>Se connecter</Text>
       </Pressable>
 
-      <Pressable style={styles.button} onPress={() => navigation.navigate("home")}>
+      <Pressable style={styles.button} onPress={() => { }}>
         <Text style={styles.buttonLabel}>Dev: Go to homepage</Text>
       </Pressable>
     </>

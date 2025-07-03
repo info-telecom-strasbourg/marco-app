@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useCart, useCartDispatch } from "../../src/store/cart";
+import { useCartStore } from "@/store/cart";
 import { FlashList } from "@shopify/flash-list";
+import { CartItem } from "@/schemas/cart";
 
 function Circle({ color, size }: { color: string, size: number }) {
   return <View style={{
@@ -12,12 +13,12 @@ function Circle({ color, size }: { color: string, size: number }) {
 }
 
 function ProductCard({ item }: { item: CartItem }) {
-  const { removeArticle, increaseQuantity, decreaseQuantity } = useCartDispatch();
+  const store = useCartStore();
 
-  const handleIncr = () => increaseQuantity(item.article.id);
-  const handleDecr = () => item!.quantity > 1 ? decreaseQuantity(item.article.id) : removeArticle(item.article.id);
+  const handleIncr = () => store.incrementQuantity(item.product.id);
+  const handleDecr = () => item!.quantity > 1 ? store.decrementQuantity(item.product.id) : store.removeProduct(item.product.id);
 
-  const { article } = item;
+  const { product: article } = item;
 
   return (
     <View style={style.productContainer}>
@@ -44,10 +45,10 @@ function ProductCard({ item }: { item: CartItem }) {
 
 
 export default function CartPage() {
-  const cart = useCart();
+  const store = useCartStore();
 
-  const cartPrice = cart.items.reduce(
-    (acc, item) => acc += (parseFloat(item.article.price) * item.quantity),
+  const cartPrice = store.items.reduce(
+    (acc, item) => acc += item.product.price * item.quantity,
     0
   );
 
@@ -60,8 +61,8 @@ export default function CartPage() {
         renderItem={({ item }) => {
           return <ProductCard item={item} />
         }}
-        keyExtractor={item => item.article.id.toString()}
-        data={cart.items}
+        keyExtractor={item => item.product.id.toString()}
+        data={store.items}
         estimatedItemSize={100}
       />
 

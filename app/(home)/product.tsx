@@ -1,8 +1,9 @@
 import { FlashList } from "@shopify/flash-list";
-import { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { useCart, useCartDispatch } from "../../src/store/cart";
 import { useNavigation } from "@react-navigation/native";
+import { useCartStore } from "@/store/cart"
+import { Product } from "@/schemas/fouaille/product";
+import { getProducts } from "@/query/fouaille/products";
 
 function Circle({ color, size }: { color: string, size: number }) {
   return <View style={{
@@ -13,15 +14,14 @@ function Circle({ color, size }: { color: string, size: number }) {
   }}></View>
 }
 
-function ProductCard({ article }: { article: Article }) {
-  const cart = useCart();
-  const { addArticle, removeArticle, increaseQuantity, decreaseQuantity } = useCartDispatch();
+function ProductCard({ article }: { article: Product }) {
+  const store = useCartStore();
 
-  const item = cart.items.find(item => item.article.id == article.id);
+  const item = store.items.find(item => item.product.id == article.id);
 
-  const handleAdd = () => addArticle(article);
-  const handleIncr = () => increaseQuantity(article.id);
-  const handleDecr = () => item!.quantity > 1 ? decreaseQuantity(article.id) : removeArticle(article.id)
+  const handleAdd = () => store.addProduct(article);
+  const handleIncr = () => store.incrementQuantity(article.id);
+  const handleDecr = () => item!.quantity > 1 ? store.decrementQuantity(article.id) : store.removeProduct(article.id)
 
   return (
     <View style={style.productContainer}>
@@ -56,7 +56,7 @@ function ProductCard({ article }: { article: Article }) {
   )
 }
 
-function ProductList({ products }: { products: Article[] }) {
+function ProductList({ products }: { products: Product[] }) {
   return (
     <FlashList
       renderItem={({ item }) => {
@@ -84,16 +84,10 @@ function CartButton() {
 }
 
 export default function ProductPage() {
-  const [items, setItems] = useState<Article[]>([]);
-  const cart = useCart();
+  const items = getProducts();
+  const cart = useCartStore();
 
-  useEffect(() => {
-    fetch("https://fouaille.bde-tps.fr/api/product")
-      .then(res => res.json())
-      .then((payload: APIResponse) => setItems(payload.data[0].products))
-  }, [])
-
-  if (!items.length) {
+  if (!items) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Please wait while we fetch the products...</Text>
@@ -103,7 +97,7 @@ export default function ProductPage() {
 
   return (
     <View style={style.mainContainer}>
-      <ProductList products={items} />
+      <ProductList products={items.data.at(0)!.products} />
       {cart.items.length > 0 && <CartButton />}
     </View>
   )
