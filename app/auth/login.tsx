@@ -15,11 +15,12 @@ function LoginForm() {
       `Log in using credentials: ${username} - ${password}`, 2, 0);
 
     signIn({ email: username, password })
-      .then(payload => ToastAndroid.showWithGravity(`Connected as ${payload.user}`, 2, 0))
+      .then(payload => ToastAndroid.showWithGravity(payload ? `Connected as ${payload.user.user_name}` : 'Invalid credentials', 2, 0))
   }
 
   return (
     <>
+      <Text>Sign In URL is: {process.env.EXPO_PUBLIC_API_URL}</Text>
       <TextInput style={styles.input} onChangeText={setUsername} placeholder="Username" />
       <TextInput style={styles.input} onChangeText={setPassword} secureTextEntry={true} placeholder="Password" />
 

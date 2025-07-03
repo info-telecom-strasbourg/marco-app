@@ -20,7 +20,7 @@ export const useAuth = () => {
 
   const signIn = async (payload: SignIn) => {
     // Query API to get a new token
-    const { token, user } = await fetch(
+    const res = await fetch(
       `${process.env.EXPO_PUBLIC_API_URL}/api/login`,
       {
         method: "POST",
@@ -29,7 +29,13 @@ export const useAuth = () => {
         },
         body: JSON.stringify(payload),
       }
-    ).then((res) => res.json())
+    );
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const { user, token } = await res.json();
 
     saveAuthData(token, user) // save data in local store
     setAuthData(user, token) // save data on device storage
