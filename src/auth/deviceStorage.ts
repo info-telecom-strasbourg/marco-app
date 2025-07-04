@@ -1,5 +1,4 @@
-import { type User } from "@/schemas/user";
-import { UserSchema } from "@/schemas/user";
+import { AuthUser, AuthUserSchema } from "@/schemas/auth/user";
 import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
 
 const TOKEN_KEY = "authToken";
@@ -7,7 +6,7 @@ const USER_KEY = "authUser";
 
 export const saveAuthData = async (
   token: string,
-  user: User
+  user: AuthUser
 ): Promise<void> => {
   try {
     await setItemAsync(TOKEN_KEY, token);
@@ -19,13 +18,13 @@ export const saveAuthData = async (
 
 export const getAuthData = async (): Promise<{
   token: string | null;
-  user: User | null;
+  user: AuthUser | null;
 }> => {
   try {
     const token = await getItemAsync(TOKEN_KEY);
     const userString = await getItemAsync(USER_KEY);
 
-    const user = userString ? UserSchema.safeParse(JSON.parse(userString)).data! : null;
+    const user = userString ? AuthUserSchema.safeParse(JSON.parse(userString)).data! : null;
     return { token, user };
   } catch (error) {
     console.error("Error getting auth data", error);

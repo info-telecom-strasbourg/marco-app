@@ -1,12 +1,12 @@
 import { create } from "zustand"
 
-import type { User } from "@/schemas/user"
+import { AuthUser } from "@/schemas/auth/user"
 
 type AuthStore = {
-  user: User | null
+  user: AuthUser | null
   token: string
 
-  setAuthData: (user: User, token: string) => void
+  setAuthData: (user: AuthUser, token: string) => void
   deleteAuthData: () => void
 }
 
@@ -14,6 +14,6 @@ export const useAuthStore = create<AuthStore>((mutate) => ({
   user: null,
   token: '',
 
-  setAuthData: (user: User, token: string) => mutate((state) => ({ user, token })),
+  setAuthData: (user: AuthUser, token: string) => mutate((state) => ({ user, token })),
   deleteAuthData: () => mutate((state) => ({ user: null, token: '' }))
 }))
