@@ -13,5 +13,11 @@
         "./app/*"
       ]
     }
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "tailwind.config.js",
+    "nativewind-env.d.ts"
+  ]
 }
