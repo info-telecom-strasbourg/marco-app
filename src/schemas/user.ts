@@ -21,11 +21,11 @@ export const UserCommonSchema = z.object({
  * Private informations are not included
  */
 export const UserSchema = z.object({
-  ...UserCommonSchema // Patch until I found what to do with that
+  ...UserCommonSchema.shape // Patch until I found what to do with that
 })
 
 export const MeSchema = z.object({
-  ...UserCommonSchema,
+  ...UserCommonSchema.shape,
   avatar_url: z.url(),
   sector: z.string()
 })
