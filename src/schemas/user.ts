@@ -10,7 +10,7 @@ export const UserCommonSchema = z.object({
   email: z.email(),
   phone: z.string(),
   birth_date: z.string(),
-  promotion_year: z.string(),
+  promotion_year: z.number(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   email_verified_at: z.coerce.date()

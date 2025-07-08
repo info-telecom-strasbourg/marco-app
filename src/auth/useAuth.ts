@@ -10,6 +10,7 @@ export const useAuth = () => {
   useEffect(() => {
     async function loadFromDevice() {
       const { token, user } = await getAuthData();
+
       if (token && user) {
         setAuthData(user, token);
       }

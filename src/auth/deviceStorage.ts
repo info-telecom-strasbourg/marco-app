@@ -24,12 +24,17 @@ export const getAuthData = async (): Promise<{
     const token = await getItemAsync(TOKEN_KEY);
     const userString = await getItemAsync(USER_KEY);
 
-    const user = userString ? AuthUserSchema.safeParse(JSON.parse(userString)).data! : null;
-    return { token, user };
+    if (token && userString) {
+      const parsedUser = AuthUserSchema.safeParse(JSON.parse(userString));
+      const user = userString ? parsedUser.data! : null;
+
+      return { token, user };
+    }
   } catch (error) {
     console.error("Error getting auth data", error);
-    return { token: null, user: null };
   }
+
+  return { token: null, user: null };
 };
 
 export const clearAuthData = async (): Promise<void> => {
