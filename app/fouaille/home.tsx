@@ -1,14 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 export default function FouailleHome({ route }) {
   const navigation = useNavigation();
   const [scannerData, setScannerData] = useState('');
-
-  function openScanner() {
-    navigation.navigate("Scanner");
-  }
 
   useEffect(() => {
     if (route.params?.scanData) {
@@ -17,10 +13,17 @@ export default function FouailleHome({ route }) {
   }, [route.params?.scanData]);
 
   return (
-    <SafeAreaView>
-      <TouchableOpacity className="flex-1 flex-end items-center" onPress={openScanner}>
-        <Text>Scan a QRCode</Text>
-      </TouchableOpacity>
+    <SafeAreaView className="flex-1 p-2">
+      <View className="justify-evenly flex-row">
+        <TouchableOpacity className="items-center" onPress={() => navigation.navigate("Scanner")}>
+          <Text>Scan a QRCode</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity className="items-center" onPress={() => navigation.navigate("Presets")}>
+          <Text>Edit presets</Text>
+        </TouchableOpacity>
+
+      </View>
 
       {scannerData && <Text>{scannerData}</Text>}
     </SafeAreaView>

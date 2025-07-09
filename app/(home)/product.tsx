@@ -74,7 +74,7 @@ function CartButton() {
   const navigation = useNavigation();
 
   // @ts-ignore
-  const handlePress = () => navigation.navigate("cart");
+  const handlePress = () => navigation.navigate("Cart");
 
   return (
     <TouchableOpacity onPress={handlePress} style={{ padding: 10, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center' }}>
