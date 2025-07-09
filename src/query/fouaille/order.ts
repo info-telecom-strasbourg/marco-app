@@ -2,17 +2,21 @@ import { ZodError } from "zod/v4";
 import { useQuery } from "@tanstack/react-query";
 
 import { OrderList, OrderListSchema } from "@/schemas/fouaille/order";
+import { useAuth } from "@/auth/useAuth";
 
-async function ordersFetcher(): Promise<OrderList | null> {
+async function ordersFetcher(token: string) {
   try {
     const payload = await fetch(
-      "https://fouaille.bde-tps.fr/api/fouaille",
-      { headers: { "Content-Type": "application/json" } }
+      `${process.env.EXPO_PUBLIC_API_URL}/api/fouaille`,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
     ).then(res => res.json());
-
     const parsed = OrderListSchema.safeParse(payload);
 
-    return parsed.data!;
+    return parsed.data!.data;
   } catch (error) {
     if (error instanceof ZodError) {
       error.issues.map((e) => ({ path: e.path, message: e.message }));
@@ -25,18 +29,13 @@ async function ordersFetcher(): Promise<OrderList | null> {
   return null;
 }
 
-export function getOrders() {
-  const { data } = useQuery({
+export function useOrders() {
+  const { token } = useAuth();
+
+  return useQuery({
     queryKey: ["orders"],
-    queryFn: ordersFetcher
+    queryFn: () => ordersFetcher(token)
   })
-
-  if (!data) {
-    return null;
-  }
-
-
-  return data;
 }
 
 
