@@ -8,6 +8,7 @@ import ProductPage from './(home)/product';
 import CartPage from './(home)/cart';
 
 import FouailleHome from './fouaille/home';
+import PresetPage from './fouaille/presets';
 import ScanPage from './fouaille/scan';
 
 import { useAuthStore } from "@/store/auth";
@@ -29,13 +30,14 @@ export default function RootLayout() {
           ) : (
             <>
               <Stack.Group>
-                <Stack.Screen name='Products' component={ProductPage} options={{ headerTitle: "Produits" }} />
                 <Stack.Screen name='Home' component={HomePage} options={{ headerTitle: "Mon compte fouaille" }} />
+                <Stack.Screen name='Products' component={ProductPage} options={{ headerTitle: "Produits" }} />
                 <Stack.Screen name='Cart' component={CartPage} options={{ headerTitle: "Mon panier" }} />
               </Stack.Group>
 
               <Stack.Group>
                 <Stack.Screen name='Fouaille' component={FouailleHome} />
+                <Stack.Screen name='Presets' component={PresetPage} />
                 <Stack.Screen name='Scanner' component={ScanPage} options={{ presentation: 'modal' }} />
               </Stack.Group>
             </>
