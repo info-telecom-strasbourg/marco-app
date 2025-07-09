@@ -18,22 +18,26 @@ type CartStoreAction = {
 export const useCartStore = create<Cart & CartStoreAction>()(
   immer((set) => ({
     items: [],
-    addProduct: (product) => set(state => state.items.push({ product, quantity: 1 })),
+    addProduct: (product: Product) =>
+      set((state) => {
+        state.items.push({ product, quantity: 1 })
+      }),
 
-    decrementQuantity: (productId) =>
+    removeProduct: (productId) =>
       set(state => {
         const target = state.items.findIndex(item => item.product.id == productId);
         state.items.splice(target, 1);
       }),
 
+    decrementQuantity: (productId) =>
+      set(state => {
+        state.items.find(item => item.product.id == productId)!.quantity -= 1;
+      }),
+
     incrementQuantity: (productId) =>
       set(state => {
         state.items.find(item => item.product.id == productId)!.quantity += 1;
-      }),
-
-    removeProduct: (productId) =>
-      set(state => {
-        state.items.find(item => item.product.id == productId)!.quantity += 1;
-      }),
+      })
   }))
 )
+
