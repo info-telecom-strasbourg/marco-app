@@ -7,8 +7,8 @@ import { useAuth } from "@/auth/useAuth";
 function LoginForm() {
   const { signIn } = useAuth();
 
-  const [username, setUsername] = useState<string>('admin@local.dev');
-  const [password, setPassword] = useState<string>('pekorapeko');
+  const [username, setUsername] = useState<string>('root@admin.dev');
+  const [password, setPassword] = useState<string>('password');
 
   function onLoginPress() {
     ToastAndroid.showWithGravity(
@@ -21,15 +21,11 @@ function LoginForm() {
   return (
     <>
       <Text>Sign In URL is: {process.env.EXPO_PUBLIC_API_URL}</Text>
-      <TextInput style={styles.input} onChangeText={setUsername} placeholder="Username" />
-      <TextInput style={styles.input} onChangeText={setPassword} secureTextEntry={true} placeholder="Password" />
+      <TextInput style={styles.input} value={username} onChangeText={setUsername} placeholder="Username" />
+      <TextInput style={styles.input} value={password} onChangeText={setPassword} secureTextEntry={true} placeholder="Password" />
 
-      <Pressable style={styles.button} onPress={() => onLoginPress()}>
+      <Pressable style={styles.button} onPress={onLoginPress}>
         <Text style={styles.buttonLabel}>Se connecter</Text>
-      </Pressable>
-
-      <Pressable style={styles.button} onPress={() => { }}>
-        <Text style={styles.buttonLabel}>Dev: Go to homepage</Text>
       </Pressable>
     </>
   )

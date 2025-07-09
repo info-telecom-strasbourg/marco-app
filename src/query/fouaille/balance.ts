@@ -1,40 +1,37 @@
 import { useQuery } from "@tanstack/react-query"
 import { ZodError } from "zod/v4";
 
-import { Balance, BalanceSchema } from "@/schemas/fouaille/balance";
+import { BalanceSchema } from "@/schemas/fouaille/balance";
+import { useAuth } from "@/auth/useAuth";
 
-async function balanceFetcher(): Promise<Balance | null> {
+async function balanceFetcher(token: string) {
   try {
     const payload = await fetch(
-      "https://fouaille.bde-tps.fr/api/fouaille/balance",
-      { headers: { "Content-Type": "application/json" } }
+      `${process.env.EXPO_PUBLIC_API_URL}/api/fouaille`,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
     ).then(res => res.json());
 
     const parsed = BalanceSchema.safeParse(payload);
 
-    return parsed.data!;
+    return parsed.data!.data;
   } catch (error) {
     if (error instanceof ZodError) {
       error.issues.map((e) => ({ path: e.path, message: e.message }));
-      console.error(error);
     }
 
     console.error(error);
   }
-
-  return null;
 }
 
-export function getBalance() {
-  const { data } = useQuery({
+export function useBalance() {
+  const { token } = useAuth();
+
+  return useQuery({
     queryKey: ["balance"],
-    queryFn: balanceFetcher
+    queryFn: () => balanceFetcher(token)
   })
-
-  if (!data) {
-    return null;
-  }
-
-
-  return data;
 }

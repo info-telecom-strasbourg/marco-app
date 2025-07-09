@@ -1,7 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useCartStore } from "@/store/cart";
+import { Text, TouchableOpacity, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import { CartItem } from "@/schemas/cart";
+
+import { useCartStore } from "@/store/cart";
+
+import type { CartItem } from "@/schemas/cart";
 
 function Circle({ color, size }: { color: string, size: number }) {
   return <View style={{
@@ -21,22 +23,24 @@ function ProductCard({ item }: { item: CartItem }) {
   const { product: article } = item;
 
   return (
-    <View style={style.productContainer}>
+    <View className="flex-1 flex-row gap-1 p-2">
       <Circle size={40} color={article.color} />
 
-      <View style={{ flex: 1 }}>
+      <View className="flex-1">
         <Text style={{ fontSize: 16 }}>{article.title}</Text>
         <Text style={{ fontSize: 12 }}>{article.price}</Text>
       </View>
 
 
-      <View style={style.productAmount}>
-        <TouchableOpacity style={style.amountButton} onPress={handleDecr}>
-          <Text style={style.amountButtonText}>-</Text>
+      <View className="flex-row items-center">
+        <TouchableOpacity className="size-8 rounded-2xl items-center justify-center" onPress={handleDecr}>
+          <Text className="text-lg">-</Text>
         </TouchableOpacity>
-        <Text style={style.amountText}>{item?.quantity ?? 0}</Text>
-        <TouchableOpacity style={style.amountButton} onPress={handleIncr}>
-          <Text style={style.amountButtonText}>+</Text>
+
+        <Text className="text-lg font-bold">{item?.quantity ?? 0}</Text>
+
+        <TouchableOpacity className="size-8 rounded-2xl items-center justify-center" onPress={handleIncr}>
+          <Text className="text-lg">+</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -56,7 +60,7 @@ export default function CartPage() {
   const formattedPrice = Math.round(cartPrice * 100) / 100;
 
   return (
-    <View style={style.mainContainer}>
+    <View className="flex p-2">
       <FlashList
         renderItem={({ item }) => {
           return <ProductCard item={item} />
@@ -66,44 +70,9 @@ export default function CartPage() {
         estimatedItemSize={100}
       />
 
-      <TouchableOpacity style={{ padding: 10, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{ color: "white" }}>Valider ma commande - {formattedPrice}€</Text>
+      <TouchableOpacity className="p-2 justify-center items-center bg-black">
+        <Text className="color-white">Valider ma commande - {formattedPrice}€</Text>
       </TouchableOpacity>
     </View>
   )
 }
-
-const style = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    padding: 8,
-    backgroundColor: 'light-gray'
-  },
-  productContainer: {
-    flex: 1,
-    flexDirection: "row",
-    gap: 4,
-    padding: 10,
-  },
-  amountButton: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#ffa726',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  amountButtonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  amountText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginHorizontal: 16,
-  },
-  productAmount: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  }
-})
