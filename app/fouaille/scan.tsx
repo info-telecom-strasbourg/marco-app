@@ -1,10 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
-import { Button, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Button, Platform, Text, View } from 'react-native';
 
 export default function ScanPage() {
   const [permission, requestPermission] = useCameraPermissions();
-  const navigation = useNavigation();
+  const router = useRouter();
 
   if (!permission) {
     return <View><Text>Please wait...</Text></View>
@@ -26,25 +26,13 @@ export default function ScanPage() {
     }
 
     console.log("Scanner: " + data);
-
-    navigation.popTo("Fouaille", { scanData: data })
   }
 
   return (
-    <View style={styles.container}>
-      <CameraView style={styles.camera} facing={"back"} onBarcodeScanned={scanCallback}>
+    <View className="flex-1 justify-center">
+      <CameraView className="flex-1" facing={"back"} onBarcodeScanned={scanCallback}>
 
       </CameraView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  camera: {
-    flex: 1,
-  },
-});
