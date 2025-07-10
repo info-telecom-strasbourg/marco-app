@@ -1,3 +1,1 @@
-export function signOut() {
-
-}
+export function signOut() {}

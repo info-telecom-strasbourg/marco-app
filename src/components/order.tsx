@@ -1,5 +1,5 @@
 import { Typography } from "@/components/primitives/typography";
-import type { Order } from "@/schemas/fouaille/order"
+import type { Order } from "@/schemas/fouaille/order";
 
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -17,7 +17,7 @@ export const OrderItem = ({ order }: { order: Order }) => {
           <>
             <View>
               <Typography size="h4" fontWeight="semibold">
-                {order?.product?.name}
+                {order?.product[0].name}
               </Typography>
               <Text
                 style={{
@@ -72,4 +72,3 @@ export const OrderItem = ({ order }: { order: Order }) => {
     </TouchableOpacity>
   );
 };
-

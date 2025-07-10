@@ -6,7 +6,7 @@ export const PresetSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   category: z.number(), // Refer to product_type in ProductListSectionSchema
-  products: z.array(ProductSchema)
-})
+  products: z.array(ProductSchema),
+});
 
-export type Preset = z.infer<typeof PresetSchema>
+export type Preset = z.infer<typeof PresetSchema>;

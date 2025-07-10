@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query";
 import { ZodError } from "zod/v4";
 
 import { BalanceSchema } from "@/schemas/fouaille/balance";
@@ -10,10 +10,10 @@ async function balanceFetcher(token: string) {
       `${process.env.EXPO_PUBLIC_API_URL}/api/fouaille`,
       {
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      }
-    ).then(res => res.json());
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    ).then((res) => res.json());
 
     const parsed = BalanceSchema.safeParse(payload);
 
@@ -32,6 +32,6 @@ export function useBalance() {
 
   return useQuery({
     queryKey: ["balance"],
-    queryFn: () => balanceFetcher(token)
-  })
+    queryFn: () => balanceFetcher(token),
+  });
 }

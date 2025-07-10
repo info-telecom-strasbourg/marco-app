@@ -5,8 +5,8 @@ export const BalanceSchema = z.object({
     balance: z.coerce.number(),
     first_name: z.string(),
     last_name: z.string(),
-    user_name: z.string()
-  })
+    user_name: z.string(),
+  }),
 });
 
 export type Balance = z.infer<typeof BalanceSchema>;

@@ -7,14 +7,20 @@ export default function FouailleHome() {
   return (
     <SafeAreaView className="flex-1 p-2">
       <View className="justify-evenly flex-row">
-        <TouchableOpacity className="items-center" onPress={() => router.navigate("/fouaille/scan")}>
+        <TouchableOpacity
+          className="items-center"
+          onPress={() => router.navigate("/fouaille/scan")}
+        >
           <Text>Scan a QRCode</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="items-center" onPress={() => router.navigate("/fouaille/presets")}>
+        <TouchableOpacity
+          className="items-center"
+          onPress={() => router.navigate("/fouaille/presets")}
+        >
           <Text>Edit presets</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  )
+  );
 }

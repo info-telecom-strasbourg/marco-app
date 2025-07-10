@@ -5,10 +5,9 @@ import { ProductList, ProductListSchema } from "@/schemas/fouaille/productList";
 
 async function productsFetcher(): Promise<ProductList | null> {
   try {
-    const payload = await fetch(
-      "https://fouaille.bde-tps.fr/api/product",
-      { headers: { "Content-Type": "application/json" } }
-    ).then(res => res.json());
+    const payload = await fetch("https://fouaille.bde-tps.fr/api/product", {
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => res.json());
 
     const parsed = ProductListSchema.safeParse(payload);
 
@@ -25,16 +24,15 @@ async function productsFetcher(): Promise<ProductList | null> {
   return null;
 }
 
-export function getProducts() {
+export function useProducts() {
   const { data } = useQuery({
     queryKey: ["products"],
-    queryFn: productsFetcher
+    queryFn: productsFetcher,
   });
 
   if (!data) {
     return null;
   }
-
 
   return data;
 }

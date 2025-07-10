@@ -17,9 +17,8 @@ function PresetItem({ item }: { item: Preset }) {
         <Text style={{}}>{item.products.length}</Text>
       </View>
     </View>
-  )
+  );
 }
-
 
 export default function PresetPage() {
   const [activeChip, setActiveChip] = useState<number>(3);
@@ -31,29 +30,41 @@ export default function PresetPage() {
   useEffect(() => {
     if (!productTypes?.data) return;
 
-    setFilteredPresets(presets.filter(preset => preset.category == activeChip))
-  }, [productTypes, presets, activeChip])
+    setFilteredPresets(
+      presets.filter((preset) => preset.category === activeChip),
+    );
+  }, [productTypes, presets, activeChip]);
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 4 }}>
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", padding: 8 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+          padding: 8,
+        }}
+      >
         <TouchableOpacity onPress={() => setActiveChip(3)}>
-          <Text style={{ color: activeChip == 3 ? "red" : "black" }}>Afterwork</Text>
+          <Text style={{ color: activeChip === 3 ? "red" : "black" }}>
+            Afterwork
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => setActiveChip(4)}>
-          <Text style={{ color: activeChip == 4 ? "red" : "black" }}>Repas</Text>
+          <Text style={{ color: activeChip === 4 ? "red" : "black" }}>
+            Repas
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => setActiveChip(1)}>
-          <Text style={{ color: activeChip == 1 ? "red" : "black" }}>Soirée</Text>
+          <Text style={{ color: activeChip === 1 ? "red" : "black" }}>
+            Soirée
+          </Text>
         </TouchableOpacity>
       </View>
 
-      <FlashList
-        data={filteredPresets}
-        renderItem={PresetItem}
-      />
+      <FlashList data={filteredPresets} renderItem={PresetItem} />
     </SafeAreaView>
-  )
+  );
 }

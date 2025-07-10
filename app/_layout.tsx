@@ -1,8 +1,8 @@
 import { useAuthStore } from "@/store/auth";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Stack } from "expo-router"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
 
-import '../global.css';
+import "../global.css";
 
 export default function RootLayout() {
   const { token } = useAuthStore();
@@ -26,5 +26,5 @@ export default function RootLayout() {
         </Stack.Protected>
       </Stack>
     </QueryClientProvider>
-  )
+  );
 }

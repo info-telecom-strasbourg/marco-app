@@ -39,8 +39,9 @@ export const Typography = ({
   fontFamily = "SpaceGrotesk",
   ...props
 }: TypographyProps) => {
-  const font = `${fontFamily}-${fontWeight}${fontStyle === "italic" ? "Italic" : ""
-    }`;
+  const font = `${fontFamily}-${fontWeight}${
+    fontStyle === "italic" ? "Italic" : ""
+  }`;
 
   return (
     <Text
@@ -52,4 +53,3 @@ export const Typography = ({
     </Text>
   );
 };
-

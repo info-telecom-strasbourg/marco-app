@@ -6,7 +6,7 @@ const USER_KEY = "authUser";
 
 export const saveAuthData = async (
   token: string,
-  user: AuthUser
+  user: AuthUser,
 ): Promise<void> => {
   try {
     await setItemAsync(TOKEN_KEY, token);

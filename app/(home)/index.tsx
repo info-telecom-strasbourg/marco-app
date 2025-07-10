@@ -1,6 +1,6 @@
 import { SafeAreaView, Text, Pressable, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import { Typography } from "@/components/primitives/typography"
+import { Typography } from "@/components/primitives/typography";
 
 import { useRouter } from "expo-router";
 import { useAuth } from "@/auth/useAuth";
@@ -10,7 +10,11 @@ import { useOrders } from "@/query/fouaille/order";
 import type { Order } from "@/schemas/fouaille/order";
 
 function OrderComponent({ item }: { item: Order }) {
-  return <Text>{item.date.toString()} - {item.total_price}</Text>
+  return (
+    <Text>
+      {item.date.toString()} - {item.total_price}
+    </Text>
+  );
 }
 
 export default function HomePage() {
@@ -41,9 +45,9 @@ export default function HomePage() {
       <FlashList
         renderItem={OrderComponent}
         data={
-          orderHistory?.orders.length ?
-            orderHistory.orders :
-            [{ amount: 10, date: new Date(), product: [], total_price: 100 }]
+          orderHistory?.orders.length
+            ? orderHistory.orders
+            : [{ amount: 10, date: new Date(), product: [], total_price: 100 }]
         }
       />
 
@@ -61,5 +65,5 @@ export default function HomePage() {
         </Pressable>
       </View>
     </SafeAreaView>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import Icon from "@expo/vector-icons/FontAwesome"
-import { Tabs } from "expo-router"
+import Icon from "@expo/vector-icons/FontAwesome";
+import { Tabs } from "expo-router";
 
 export default function HomeLayout() {
   return (
@@ -8,7 +8,7 @@ export default function HomeLayout() {
         name="index"
         options={{
           title: "Mon profil",
-          tabBarIcon: () => <Icon size={16} name="home" />
+          tabBarIcon: () => <Icon size={16} name="home" />,
         }}
       />
 
@@ -16,7 +16,7 @@ export default function HomeLayout() {
         name="history"
         options={{
           title: "Historique",
-          tabBarIcon: () => <Icon size={16} name="history" />
+          tabBarIcon: () => <Icon size={16} name="history" />,
         }}
       />
 
@@ -24,7 +24,7 @@ export default function HomeLayout() {
         name="products"
         options={{
           title: "Produits",
-          tabBarIcon: () => <Icon size={16} name="product-hunt" />
+          tabBarIcon: () => <Icon size={16} name="product-hunt" />,
         }}
       />
 
@@ -32,9 +32,9 @@ export default function HomeLayout() {
         name="cart"
         options={{
           title: "Mon panier",
-          tabBarIcon: () => <Icon size={16} name="shopping-cart" />
+          tabBarIcon: () => <Icon size={16} name="shopping-cart" />,
         }}
       />
     </Tabs>
-  )
+  );
 }

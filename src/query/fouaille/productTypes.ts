@@ -1,14 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { ZodError } from "zod/v4";
 
-import { ProductTypeList, ProductTypeListSchema } from "@/schemas/fouaille/productTypeList";
+import {
+  ProductTypeList,
+  ProductTypeListSchema,
+} from "@/schemas/fouaille/productTypeList";
 
 async function productTypesFetcher(): Promise<ProductTypeList | null> {
   try {
-    const payload = await fetch(
-      "https://fouaille.bde-tps.fr/api/productType",
-      { headers: { "Content-Type": "application/json" } }
-    ).then(res => res.json());
+    const payload = await fetch("https://fouaille.bde-tps.fr/api/productType", {
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => res.json());
 
     const parsed = ProductTypeListSchema.safeParse(payload);
 
@@ -25,16 +27,15 @@ async function productTypesFetcher(): Promise<ProductTypeList | null> {
   return null;
 }
 
-export function getProductTypes() {
+export function useProductTypes() {
   const { data } = useQuery({
     queryKey: ["product/types"],
-    queryFn: productTypesFetcher
+    queryFn: productTypesFetcher,
   });
 
   if (!data) {
     return null;
   }
-
 
   return data;
 }
