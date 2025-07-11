@@ -9,7 +9,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/PRTS.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -36,6 +36,9 @@
       ],
       "expo-router",
       "expo-secure-store"
-    ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }
