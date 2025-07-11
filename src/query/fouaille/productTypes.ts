@@ -6,7 +6,7 @@ import {
   ProductTypeListSchema,
 } from "@/schemas/fouaille/productTypeList";
 
-async function productTypesFetcher(): Promise<ProductTypeList | null> {
+async function fetcher(): Promise<ProductTypeList | null> {
   try {
     const payload = await fetch("https://fouaille.bde-tps.fr/api/productType", {
       headers: { "Content-Type": "application/json" },
@@ -27,15 +27,9 @@ async function productTypesFetcher(): Promise<ProductTypeList | null> {
   return null;
 }
 
-export function useProductTypes() {
-  const { data } = useQuery({
+export function useGetProductTypes() {
+  return useQuery({
     queryKey: ["product/types"],
-    queryFn: productTypesFetcher,
+    queryFn: fetcher,
   });
-
-  if (!data) {
-    return null;
-  }
-
-  return data;
 }

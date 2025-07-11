@@ -3,7 +3,7 @@ import { ZodError } from "zod/v4";
 
 import { ProductList, ProductListSchema } from "@/schemas/fouaille/productList";
 
-async function productsFetcher(): Promise<ProductList | null> {
+async function fetcher(): Promise<ProductList | null> {
   try {
     const payload = await fetch("https://fouaille.bde-tps.fr/api/product", {
       headers: { "Content-Type": "application/json" },
@@ -24,15 +24,9 @@ async function productsFetcher(): Promise<ProductList | null> {
   return null;
 }
 
-export function useProducts() {
-  const { data } = useQuery({
+export function useGetProducts() {
+  return useQuery({
     queryKey: ["products"],
-    queryFn: productsFetcher,
+    queryFn: fetcher,
   });
-
-  if (!data) {
-    return null;
-  }
-
-  return data;
 }
