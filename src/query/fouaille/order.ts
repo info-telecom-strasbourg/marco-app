@@ -9,10 +9,10 @@ async function fetcher(token: string): Promise<Order[] | null> {
       `${process.env.EXPO_PUBLIC_API_URL}/api/fouaille`,
       {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    ).then(res => res.json());
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    ).then((res) => res.json());
     const { data } = APIOrdersSchema.safeParse(payload);
 
     const orders = data!.data.orders;

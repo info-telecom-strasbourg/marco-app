@@ -2,8 +2,8 @@ import { FlashList } from "@shopify/flash-list";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useCartStore } from "@/store/cart";
-import { Product } from "@/schemas/fouaille/product";
-import { useProducts } from "@/query/fouaille/products";
+import type { Product } from "@/schemas/fouaille/product";
+import { useGetProducts } from "@/query/fouaille/products";
 
 function Circle({ color, size }: { color: string; size: number }) {
   return (
@@ -96,7 +96,7 @@ function CartButton() {
 }
 
 export default function ProductPage() {
-  const items = useProducts();
+  const { data: items } = useGetProducts();
   const cart = useCartStore();
 
   if (!items) {

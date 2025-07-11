@@ -9,9 +9,9 @@ export const BalanceSchema = z.object({
 
 export const APIBalanceSchema = z.object({
   data: z.object({
-    ...BalanceSchema.shape
-  })
-})
+    ...BalanceSchema.shape,
+  }),
+});
 
 export type Balance = z.infer<typeof BalanceSchema>;
 export type APIBalance = z.infer<typeof APIBalanceSchema>;

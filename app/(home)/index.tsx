@@ -5,28 +5,30 @@ import { Typography } from "@/components/primitives/typography";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/auth/useAuth";
 
-import { useBalance } from "@/query/fouaille/balance";
-import { useOrders } from "@/query/fouaille/order";
+import { useGetBalance } from "@/query/fouaille/balance";
+import { useGetOrders } from "@/query/fouaille/order";
 import type { Order } from "@/schemas/fouaille/order";
 
 function OrderComponent({ item }: { item: Order }) {
   return (
-    <Text>
-      {item.date.toString()} - {item.total_price}
-    </Text>
+    <View style={{ height: 80, padding: 16 }}>
+      <Text>
+        {item.date.toString()} - {item.total_price}
+      </Text>
+    </View>
   );
 }
 
 export default function HomePage() {
-  const { data: userData } = useBalance();
-  const { data: orderHistory } = useOrders();
+  const { data: userData } = useGetBalance();
+  const { data: orderHistory } = useGetOrders();
 
   const router = useRouter();
   const { signOut } = useAuth();
 
   return (
-    <SafeAreaView>
-      <View className="mx-2 mb-6 flex-row items-center justify-between rounded-2xl border border-muted-foreground bg-popover p-8">
+    <SafeAreaView className="flex-1 p-safe">
+      <View className="m-4 flex-row items-center justify-between rounded-2xl border border-muted-foreground bg-popover p-8">
         <View className="flex-1 gap-4">
           <Typography size="h4" className="text-muted-foreground">
             Carte Fouaille
@@ -42,16 +44,29 @@ export default function HomePage() {
         <Text>&gt;</Text>
       </View>
 
-      <FlashList
-        renderItem={OrderComponent}
-        data={
-          orderHistory?.orders.length
-            ? orderHistory.orders
-            : [{ amount: 10, date: new Date(), product: [], total_price: 100 }]
-        }
-      />
+      <View className="gap-2" style={{ height: 160 }}>
+        <Pressable onPress={() => {}}>
+          <Text>Mes dernières commandes:</Text>
+        </Pressable>
 
-      <View>
+        <FlashList
+          renderItem={OrderComponent}
+          data={
+            orderHistory?.length
+              ? orderHistory
+              : [
+                  {
+                    amount: 10,
+                    date: new Date(),
+                    product: [],
+                    total_price: 100,
+                  },
+                ]
+          }
+        />
+      </View>
+
+      <View className="flex-1">
         <Pressable onPress={() => router.navigate("/fouaille")}>
           <Text>Passer en mode fouaille (ToDo: permission)</Text>
         </Pressable>

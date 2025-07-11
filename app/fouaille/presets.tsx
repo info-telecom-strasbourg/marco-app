@@ -1,4 +1,4 @@
-import { getProductTypes } from "@/query/fouaille/productTypes";
+import { useGetProductTypes } from "@/query/fouaille/productTypes";
 import type { Preset } from "@/schemas/fouaille/preset";
 import { usePresetStore } from "@/store/preset";
 import { FlashList } from "@shopify/flash-list";
@@ -24,7 +24,7 @@ export default function PresetPage() {
   const [activeChip, setActiveChip] = useState<number>(3);
   const [filteredPresets, setFilteredPresets] = useState<Preset[]>([]);
 
-  const productTypes = getProductTypes();
+  const { data: productTypes } = useGetProductTypes();
   const { presets } = usePresetStore();
 
   useEffect(() => {

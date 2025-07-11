@@ -8,7 +8,7 @@ export const OrderSchema = z.object({
   total_price: z.number(),
   amount: z.number(),
   product: z.array(ProductSchema),
-})
+});
 
 export const APIOrdersSchema = z.object({
   data: z.object({
