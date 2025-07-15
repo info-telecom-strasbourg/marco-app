@@ -4,7 +4,7 @@ import { ZodError } from "zod/v4";
 import { APIBalanceSchema, Balance } from "@/schemas/fouaille/balance";
 import { useAuth } from "@/auth/useAuth";
 
-async function fetcher(token: string): Promise<Balance | undefined> {
+async function get(): Promise<Balance | undefined> {
   try {
     const payload = await fetch(
       `${process.env.EXPO_PUBLIC_API_URL}/api/fouaille/balance`,
@@ -32,6 +32,6 @@ export function useGetBalance() {
 
   return useQuery({
     queryKey: ["balance"],
-    queryFn: () => fetcher(token),
+    queryFn: get,
   });
 }
