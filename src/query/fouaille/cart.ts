@@ -1,5 +1,6 @@
 import { useAuth } from "@/auth/useAuth";
-import { Cart } from "@/schemas/cart";
+import { CartItem } from "@/schemas/cart";
+import { CartState } from "@/store/cart";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 async function getAll(token: string) {
@@ -37,9 +38,9 @@ async function get(cartId: number, token: string) {
   }
 }
 
-async function post(cart: Cart, token: string) {
+async function post(cart: CartItem[], token: string) {
   try {
-    const payload = cart.items.map((item) => ({
+    const payload = cart.map((item) => ({
       productId: item.product.id,
       quantity: item.quantity,
     }));
@@ -100,12 +101,14 @@ export function useGetCart(cartId: number) {
   });
 }
 
-export function useCheckoutCart(cart: Cart) {
+
+export function useCheckoutCart() {
   const { token } = useAuth();
 
   return useMutation({
     mutationKey: ["carts"],
-    mutationFn: () => post(cart, token),
+    mutationFn: (cart: CartState) => post(cart.items, token),
+    onMutate: (cart) => cart.clear(), // clear local cart now that we have sent it to the server
   });
 }
 
@@ -113,7 +116,7 @@ export function useDeleteCart(cartId: number) {
   const { token } = useAuth();
 
   return useMutation({
-    mutationKey: ["carts"],
+    mutationKey: ["carts", cartId],
     mutationFn: () => deleteCart(cartId, token),
   });
 }

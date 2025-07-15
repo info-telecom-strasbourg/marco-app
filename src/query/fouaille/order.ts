@@ -1,4 +1,7 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+} from "@tanstack/react-query";
 import { APIOrdersSchema, OrderSchema } from "@/schemas/fouaille/order";
 import { useAuth } from "@/auth/useAuth";
 
@@ -40,19 +43,13 @@ async function get(orderId: number, token: string) {
   }
 }
 
-export function useGetAllOrders() {
+export function useGetAllOrders(pageParam: number) {
   const { token } = useAuth();
 
-  return useInfiniteQuery({
-    queryKey: ["orders"],
-    queryFn: ({ pageParam }) => getAll(pageParam, token),
-
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
-      return lastPage!.meta.last_page === lastPage!.meta.current_page
-        ? undefined
-        : lastPage!.meta.current_page + 1;
-    },
+  return useQuery({
+    queryKey: ["orders", pageParam],
+    queryFn: () => getAll(pageParam, token),
+    placeholderData: keepPreviousData,
   });
 }
 
