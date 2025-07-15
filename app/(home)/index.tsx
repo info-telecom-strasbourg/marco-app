@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/auth/useAuth";
 
 import { useGetBalance } from "@/query/fouaille/balance";
-import { useGetOrders } from "@/query/fouaille/order";
+import { useGetAllOrders } from "@/query/fouaille/order";
 import type { Order } from "@/schemas/fouaille/order";
 
 function OrderComponent({ item }: { item: Order }) {
@@ -20,8 +20,8 @@ function OrderComponent({ item }: { item: Order }) {
 }
 
 export default function HomePage() {
-  const { data: userData } = useGetBalance();
-  const { data: orderHistory } = useGetOrders();
+  const userBalance = useGetBalance();
+  const orderHistory = useGetAllOrders(0);
 
   const router = useRouter();
   const { signOut } = useAuth();
@@ -34,10 +34,12 @@ export default function HomePage() {
             Carte Fouaille
           </Typography>
           <Typography size="h1" fontWeight="bold">
-            {userData?.balance}€
+            {userBalance.isSuccess ? "--" : userBalance.data!.balance}€
           </Typography>
           <Typography size="h3" fontWeight="semibold">
-            {`${userData?.first_name} ${userData?.last_name}`}
+            {userBalance.isSuccess
+              ? "-- --"
+              : `${userBalance.data!.first_name} ${userBalance.data!.last_name}`}
           </Typography>
         </View>
 
@@ -45,25 +47,16 @@ export default function HomePage() {
       </View>
 
       <View className="gap-2" style={{ height: 160 }}>
-        <Pressable onPress={() => {}}>
-          <Text>Mes dernières commandes:</Text>
-        </Pressable>
+        <Text>Mes dernières commandes:</Text>
 
-        <FlashList
-          renderItem={OrderComponent}
-          data={
-            orderHistory?.length
-              ? orderHistory
-              : [
-                  {
-                    amount: 10,
-                    date: new Date(),
-                    product: [],
-                    total_price: 100,
-                  },
-                ]
-          }
-        />
+        {orderHistory.isSuccess ? (
+          <FlashList
+            renderItem={OrderComponent}
+            data={orderHistory.data!.data.orders}
+          />
+        ) : (
+          <Text>Waiting for data...</Text>
+        )}
       </View>
 
       <View className="flex-1">

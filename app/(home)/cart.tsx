@@ -1,9 +1,10 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
 import { useCartStore } from "@/store/cart";
 
 import type { CartItem } from "@/schemas/cart";
+import { useCheckoutCart } from "@/query/fouaille/cart";
 
 function Circle({ color, size }: { color: string; size: number }) {
   return (
@@ -70,6 +71,11 @@ export default function CartPage() {
   // Prevent errors with floating point representation
   const formattedPrice = Math.round(cartPrice * 100) / 100;
 
+  const handleCheckout = () => {
+    const { mutate } = useCheckoutCart();
+    mutate(store);
+  }
+
   return (
     <View className="flex p-2">
       <FlashList
@@ -81,11 +87,11 @@ export default function CartPage() {
         estimatedItemSize={100}
       />
 
-      <TouchableOpacity className="p-2 justify-center items-center bg-black">
+      <Pressable className="p-2 justify-center items-center bg-black" onPress={handleCheckout}>
         <Text className="color-white">
           Valider ma commande - {formattedPrice}€
         </Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }
