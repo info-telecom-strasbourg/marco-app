@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, ExtractState } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 import type { Cart } from "@/schemas/cart";
@@ -9,7 +9,10 @@ type CartStoreAction = {
   removeProduct: (productId: Product["id"]) => void;
   incrementQuantity: (productId: Product["id"]) => void;
   decrementQuantity: (productId: Product["id"]) => void;
+  clear: () => void;
 };
+
+export type CartState = ExtractState<typeof useCartStore>
 
 // zustand creates a hook that we can call everywhere from our app to access the store data
 // For more informations:
@@ -41,6 +44,10 @@ export const useCartStore = create<Cart & CartStoreAction>()(
       set((state) => {
         state.items.find((item) => item.product.id === productId)!.quantity +=
           1;
+      }),
+    clear: () =>
+      set((state) => {
+        state.items = [];
       }),
   })),
 );
