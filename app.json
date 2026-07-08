@@ -39,9 +39,12 @@
       [
         "expo-asset",
         {
-          "assets": ["./assets/PRTS.png"]
+          "assets": [
+            "./assets/PRTS.png"
+          ]
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
