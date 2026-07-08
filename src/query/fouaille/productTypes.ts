@@ -8,9 +8,9 @@ import {
 
 async function getAll(): Promise<ProductTypeList | null> {
   try {
-    const payload = await fetch("https://fouaille.bde-tps.fr/api/productType", {
-      headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+    const payload = await fetch(
+      `${process.env.EXPO_PUBLIC_FOUAILLE_URL}/api/productType`,
+    ).then((res) => res.json());
 
     const parsed = ProductTypeListSchema.safeParse(payload);
 
