@@ -3,7 +3,8 @@ import type { Preset } from "@/schemas/fouaille/preset";
 import { usePresetStore } from "@/store/preset";
 import { FlashList } from "@shopify/flash-list";
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function PresetItem({ item }: { item: Preset }) {
   return (
