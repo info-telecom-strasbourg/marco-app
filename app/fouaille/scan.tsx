@@ -3,10 +3,12 @@ import {
   CameraView,
   useCameraPermissions,
 } from "expo-camera";
-import { Button, Platform, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Button, Platform, Text, View, StyleSheet } from "react-native";
 
 export default function ScanPage() {
   const [permission, requestPermission] = useCameraPermissions();
+  const router = useRouter();
 
   if (!permission) {
     return (
@@ -31,16 +33,35 @@ export default function ScanPage() {
       await CameraView.dismissScanner();
     }
 
-    console.log("Scanner: " + data);
+    try {
+      const { cartId } = JSON.parse(data);
+
+      if (cartId) {
+        router.navigate(`/fouaille/carts/${cartId}`);
+      }
+    } catch {}
   }
 
   return (
-    <View className="flex-1 justify-center">
+    <View className="flex-1 justify-center items-center">
       <CameraView
-        className="flex-1"
         facing={"back"}
+        style={{ height: 800, width: 800 }}
         onBarcodeScanned={scanCallback}
-      ></CameraView>
+      >
+        <View style={style.hole}></View>
+      </CameraView>
     </View>
   );
 }
+
+const style = StyleSheet.create({
+  hole: {
+    position: "absolute",
+    top: 200,
+    left: 200,
+    width: 150,
+    height: 150,
+    boxShadow: "0 0 0 9999px rgba(0, 0, 255, 0.6)",
+  },
+});
