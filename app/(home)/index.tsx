@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, Pressable, View } from "react-native";
+import { Text, Pressable, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { Typography } from "@/components/primitives/typography";
 
@@ -11,9 +11,9 @@ import type { Order } from "@/schemas/fouaille/order";
 
 function OrderComponent({ item }: { item: Order }) {
   return (
-    <View style={{ height: 80, padding: 16 }}>
+    <View style={{ height: "auto", padding: 16 }}>
       <Text>
-        {item.date.toString()} - {item.total_price}
+        {item.date.toString()} - {item.total_price}€
       </Text>
     </View>
   );
@@ -27,19 +27,19 @@ export default function HomePage() {
   const { signOut } = useAuth();
 
   return (
-    <SafeAreaView className="flex-1 p-safe">
+    <View className="flex-1 p-2">
       <View className="m-4 flex-row items-center justify-between rounded-2xl border border-muted-foreground bg-popover p-8">
         <View className="flex-1 gap-4">
           <Typography size="h4" className="text-muted-foreground">
             Carte Fouaille
           </Typography>
           <Typography size="h1" fontWeight="bold">
-            {userBalance.isSuccess ? "--" : userBalance.data!.balance}€
+            {userBalance.isSuccess ? userBalance.data!.balance : "--"}€
           </Typography>
           <Typography size="h3" fontWeight="semibold">
             {userBalance.isSuccess
-              ? "-- --"
-              : `${userBalance.data!.first_name} ${userBalance.data!.last_name}`}
+              ? `${userBalance.data!.first_name} ${userBalance.data!.last_name}`
+              : "-- --"}
           </Typography>
         </View>
 
@@ -47,31 +47,38 @@ export default function HomePage() {
       </View>
 
       <View className="gap-2" style={{ height: 160 }}>
-        <Text>Mes dernières commandes:</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+          Mes dernières commandes:
+        </Text>
 
         {orderHistory.isSuccess ? (
           <FlashList
             renderItem={OrderComponent}
-            data={orderHistory.data!.data.orders}
+            data={orderHistory.data!.orders}
           />
         ) : (
           <Text>Waiting for data...</Text>
         )}
       </View>
 
-      <View className="flex-1">
+      <View className="flex-1 justify-end">
         <Pressable onPress={() => router.navigate("/fouaille")}>
-          <Text>Passer en mode fouaille (ToDo: permission)</Text>
+          <Text>[Dev] Passer en mode fouaille</Text>
         </Pressable>
 
-        <Pressable onPress={() => router.navigate("/products")}>
-          <Text>Passer une commande</Text>
-        </Pressable>
-
-        <Pressable onPress={signOut}>
-          <Text>Log out</Text>
-        </Pressable>
+        <View
+          style={{
+            width: "100%",
+            backgroundColor: "red",
+            borderRadius: "8px",
+          }}
+          className="p-4"
+        >
+          <Pressable onPress={signOut}>
+            <Text style={{ color: "white", textAlign: "center" }}>Log out</Text>
+          </Pressable>
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

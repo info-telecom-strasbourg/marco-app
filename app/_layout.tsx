@@ -6,13 +6,19 @@ import "../global.css";
 
 export default function RootLayout() {
   const { token } = useAuthStore();
+  // eslint-disable-next-line @tanstack/query/stable-query-client
   const queryClient = new QueryClient();
 
   const isLoggedIn = Boolean(token);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack screenOptions={{ headerShown: false, animation: "none" }}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          animation: "none",
+        }}
+      >
         <Stack.Protected guard={!isLoggedIn}>
           <Stack.Screen name="(auth)/login" />
         </Stack.Protected>

@@ -12,7 +12,7 @@ type CartStoreAction = {
   clear: () => void;
 };
 
-export type CartState = ExtractState<typeof useCartStore>
+export type CartState = ExtractState<typeof useCartStore>;
 
 // zustand creates a hook that we can call everywhere from our app to access the store data
 // For more informations:

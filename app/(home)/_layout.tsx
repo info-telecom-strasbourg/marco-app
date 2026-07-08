@@ -3,7 +3,11 @@ import { Tabs } from "expo-router";
 
 export default function HomeLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        sceneStyle: { backgroundColor: "white" },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{

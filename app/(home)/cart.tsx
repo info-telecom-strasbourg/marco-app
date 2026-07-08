@@ -35,7 +35,9 @@ function ProductCard({ item }: { item: CartItem }) {
       <Circle size={40} color={article.color} />
 
       <View className="flex-1">
-        <Text style={{ fontSize: 16 }}>{article.title}</Text>
+        <Text style={{ fontSize: 16 }} className="capitalize">
+          {article.title}
+        </Text>
         <Text style={{ fontSize: 12 }}>{article.price}</Text>
       </View>
 
@@ -77,7 +79,7 @@ export default function CartPage() {
   }
 
   return (
-    <View className="flex p-2">
+    <SafeAreaView className="p-2 flex-1 justify-center">
       <FlashList
         renderItem={({ item }) => {
           return <ProductCard item={item} />;
@@ -87,11 +89,14 @@ export default function CartPage() {
         estimatedItemSize={100}
       />
 
-      <Pressable className="p-2 justify-center items-center bg-black" onPress={handleCheckout}>
+      <Pressable
+        className="p-2 justify-center items-center bg-black"
+        onPress={handleCheckout}
+      >
         <Text className="color-white">
           Valider ma commande - {formattedPrice}€
         </Text>
       </Pressable>
-    </View>
+    </SafeAreaView>
   );
 }

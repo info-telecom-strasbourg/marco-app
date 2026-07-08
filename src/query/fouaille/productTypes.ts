@@ -17,14 +17,13 @@ async function getAll(): Promise<ProductTypeList | null> {
     return parsed.data!;
   } catch (error) {
     if (error instanceof ZodError) {
-      error.issues.map((e) => ({ path: e.path, message: e.message }));
-      console.error(error);
+      console.error(
+        error.issues.map((e) => ({ path: e.path, message: e.message })),
+      );
     }
 
-    console.error(error);
+    throw error;
   }
-
-  return null;
 }
 
 export function useGetProductTypes() {

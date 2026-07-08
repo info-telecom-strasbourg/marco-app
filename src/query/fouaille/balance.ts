@@ -20,10 +20,12 @@ async function get(token: string): Promise<Balance | undefined> {
     return parsed.data!.data;
   } catch (error) {
     if (error instanceof ZodError) {
-      error.issues.map((e) => ({ path: e.path, message: e.message }));
+      console.log(
+        error.issues.map((e) => ({ path: e.path, message: e.message })),
+      );
     }
 
-    console.error(error);
+    throw error;
   }
 }
 

@@ -18,25 +18,20 @@ function LoginForm() {
   const [password, setPassword] = useState<string>("password");
 
   function onLoginPress() {
-    ToastAndroid.showWithGravity(
-      `Log in using credentials: ${username} - ${password}`,
-      2,
-      0,
-    );
+    ToastAndroid.show(`Log in using credentials: ${username} - ${password}`, 2);
 
-    signIn({ email: username, password }).then((payload) =>
-      ToastAndroid.showWithGravity(
+    signIn({ email: username, password }).then((payload) => {
+      ToastAndroid.show(
         payload
           ? `Connected as ${payload.user.user_name}`
           : "Invalid credentials",
         2,
-        0,
-      ),
-    );
+      );
+    });
   }
 
   return (
-    <>
+    <View className="items-center">
       <Text>Sign In URL is: {process.env.EXPO_PUBLIC_API_URL}</Text>
       <TextInput
         style={styles.input}
@@ -55,7 +50,7 @@ function LoginForm() {
       <Pressable style={styles.button} onPress={onLoginPress}>
         <Text style={styles.buttonLabel}>Se connecter</Text>
       </Pressable>
-    </>
+    </View>
   );
 }
 
