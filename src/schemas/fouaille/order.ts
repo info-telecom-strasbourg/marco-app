@@ -1,13 +1,12 @@
 import { z } from "zod/v4";
 
 import { MetaSchema } from "../meta";
-import { ProductSchema } from "./product";
 
 export const OrderSchema = z.object({
-  date: z.date(),
-  total_price: z.number(),
-  amount: z.number(),
-  product: z.array(ProductSchema),
+  date: z.coerce.date(),
+  total_price: z.coerce.number(),
+  amount: z.coerce.number(),
+  product: z.object({ name: z.string(), price: z.coerce.number() }),
 });
 
 export const APIOrdersSchema = z.object({

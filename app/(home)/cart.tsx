@@ -21,13 +21,14 @@ function Circle({ color, size }: { color: string; size: number }) {
 }
 
 function ProductCard({ item }: { item: CartItem }) {
-  const store = useCartStore();
+  const { incrementQuantity, decrementQuantity, removeProduct } =
+    useCartStore();
 
-  const handleIncr = () => store.incrementQuantity(item.product.id);
+  const handleIncr = () => incrementQuantity(item.product.id);
   const handleDecr = () =>
     item!.quantity > 1
-      ? store.decrementQuantity(item.product.id)
-      : store.removeProduct(item.product.id);
+      ? decrementQuantity(item.product.id)
+      : removeProduct(item.product.id);
 
   const { product: article } = item;
 

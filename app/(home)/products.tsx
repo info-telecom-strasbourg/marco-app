@@ -1,8 +1,17 @@
+import {
+  Text,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { FlashList } from "@shopify/flash-list";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useCartStore } from "@/store/cart";
+
 import type { Product } from "@/schemas/fouaille/product";
+
+import { useRouter } from "expo-router";
+import { useCartStore } from "@/store/cart";
 import { useGetProducts } from "@/query/fouaille/products";
 
 function Circle({ color, size }: { color: string; size: number }) {
@@ -88,10 +97,9 @@ function ProductList({ products }: { products: Product[] }) {
 }
 
 function CartButton() {
-  const navigation = useNavigation();
+  const router = useRouter();
 
-  // @ts-ignore
-  const handlePress = () => navigation.navigate("Cart");
+  const handlePress = () => router.navigate("/(home)/cart");
 
   return (
     <Pressable
@@ -104,13 +112,18 @@ function CartButton() {
 }
 
 export default function ProductPage() {
-  const { data: items } = useGetProducts();
+  const { data: items, refetch, isError } = useGetProducts();
   const cart = useCartStore();
 
   if (!items) {
     return (
       <SafeAreaView className="flex-1 justify-center items-center">
         <Text>Please wait while we fetch the products...</Text>
+        {isError && (
+          <Pressable onPress={() => refetch}>
+            <Text>Retry</Text>
+          </Pressable>
+        )}
       </SafeAreaView>
     );
   }

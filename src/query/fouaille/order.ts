@@ -1,14 +1,11 @@
-import {
-  keepPreviousData,
-  useQuery,
-} from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { APIOrdersSchema, OrderSchema } from "@/schemas/fouaille/order";
 import { useAuth } from "@/auth/useAuth";
 
 async function getAll(pageParam: number, token: string) {
   try {
     const payload = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}/api/fouaille/orders?page=${pageParam}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/api/fouaille?page=${pageParam}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -16,7 +13,8 @@ async function getAll(pageParam: number, token: string) {
       },
     ).then((res) => res.json());
 
-    const { data } = APIOrdersSchema.safeParse(payload);
+    const { data } = APIOrdersSchema.parse(payload);
+
     return data;
   } catch (error) {
     console.error(error);
