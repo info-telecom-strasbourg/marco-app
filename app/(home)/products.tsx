@@ -1,6 +1,7 @@
 import {
   Text,
   View,
+  ScrollView,
   Pressable,
   TouchableOpacity,
 } from "react-native";
@@ -13,6 +14,7 @@ import type { Product } from "@/schemas/fouaille/product";
 import { useRouter } from "expo-router";
 import { useCartStore } from "@/store/cart";
 import { useGetProducts } from "@/query/fouaille/products";
+import { useGetProductTypes } from "@/query/fouaille/productTypes";
 
 function Circle({ color, size }: { color: string; size: number }) {
   return (
@@ -114,6 +116,7 @@ function CartButton() {
 export default function ProductPage() {
   const { data: items, refetch, isError } = useGetProducts();
   const cart = useCartStore();
+  const { data: product_types , error, isSuccess } = useGetProductTypes();
 
   if (!items) {
     return (
@@ -127,11 +130,34 @@ export default function ProductPage() {
       </SafeAreaView>
     );
   }
-
+  if (!product_types)
+  {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center">
+        <Text>Erreur : product_types est vide. </Text>
+      </SafeAreaView>
+    );
+  }
+  if(!isSuccess)
+    return (
+      <SafeAreaView className="flex-1">
+        <Text>{error?.name}</Text>
+        <Text>{error?.message}</Text>
+        <Text>{error?.stack}</Text>
+      </SafeAreaView>
+    );
   return (
-    <SafeAreaView className="flex-1">
-      <ProductList products={items.data.at(0)!.products} />
-      {cart.items.length > 0 && <CartButton />}
+    
+    <SafeAreaView className="flex-1 flex-col">
+      <ScrollView>
+        { product_types.data.map( product => (
+          <SafeAreaView key= {product.id - 1} className="flex-1 flex-col">
+            <Text className="text-4xl font-bold underline"> {product.type} </Text>
+            <ProductList products={items.data.at(product.id - 1)!.products} />
+          </SafeAreaView>
+        ))}
+        {cart.items.length > 0 && <CartButton />}
+      </ScrollView>
     </SafeAreaView>
   );
 }
