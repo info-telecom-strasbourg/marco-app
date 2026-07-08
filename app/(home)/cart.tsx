@@ -4,7 +4,8 @@ import { FlashList } from "@shopify/flash-list";
 import { useCartStore } from "@/store/cart";
 
 import type { CartItem } from "@/schemas/cart";
-import { useCheckoutCart } from "@/query/fouaille/cart";
+import { useSubmitCart } from "@/query/fouaille/cart";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function Circle({ color, size }: { color: string; size: number }) {
   return (
@@ -64,6 +65,7 @@ function ProductCard({ item }: { item: CartItem }) {
 
 export default function CartPage() {
   const store = useCartStore();
+  const { mutate } = useSubmitCart();
 
   const cartPrice = store.items.reduce(
     (acc, item) => (acc += item.product.price * item.quantity),
@@ -72,10 +74,14 @@ export default function CartPage() {
 
   // Prevent errors with floating point representation
   const formattedPrice = Math.round(cartPrice * 100) / 100;
+  const handleCheckout = () => mutate(store);
 
-  const handleCheckout = () => {
-    const { mutate } = useCheckoutCart();
-    mutate(store);
+  if (store.items.length === 0) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center">
+        <Text>Panier vide</Text>
+      </SafeAreaView>
+    );
   }
 
   return (
