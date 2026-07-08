@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const BalanceSchema = z.object({
   balance: z.coerce.number(),

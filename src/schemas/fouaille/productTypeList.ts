@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { ProductTypeSchema } from "@/schemas/fouaille/productType";
 
 export const ProductTypeListSchema = z.object({

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { ZodError } from "zod/v4";
+import { ZodError } from "zod";
 
 import { ProductList, ProductListSchema } from "@/schemas/fouaille/productList";
 

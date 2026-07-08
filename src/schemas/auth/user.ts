@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { UserCommonSchema } from "../user";
 
 export const AuthUserSchema = z.object({
