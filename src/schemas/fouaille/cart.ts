@@ -9,6 +9,7 @@ const APIOrderSchema = z.object({
   date: z.coerce.date(),
   amount: z.coerce.number(),
   price: z.coerce.number(),
+  // cart_id: z.coerce.number(),
 });
 
 const APICommonCartSchema = z.object({
@@ -32,8 +33,13 @@ export const APICartSchema = z.object({
 });
 
 export const APICartCollectionSchema = z.object({
-  data: z.array(APICartSchema),
+  data: z.array(
+    z.object({
+      ...APICommonCartSchema.shape
+    })
+  ),
 });
 
+export type APICommon = z.infer<typeof APICommonCartSchema>
 export type APICart = z.infer<typeof APICartSchema>;
 export type APICartCollection = z.infer<typeof APICartCollectionSchema>;
