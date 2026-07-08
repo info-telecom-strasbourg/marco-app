@@ -31,27 +31,38 @@ function ProductCard({ article }: { article: Product }) {
       : store.removeProduct(article.id);
 
   return (
-    <View style={style.productContainer}>
+    <View className="flex-1 flex-row gap-2 p-2">
       <Circle size={40} color={article.color} />
 
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: 16 }}>{article.title}</Text>
-        <Text style={{ fontSize: 12 }}>{article.price}€</Text>
+      <View className="flex-1">
+        <Text style={{ fontSize: 16 }} className="capitalize">
+          {article.title}
+        </Text>
+        <Text style={{ fontSize: 12 }}>{article.price}</Text>
       </View>
 
-      <View style={style.productAmount}>
+      <View className="flex-row items-center">
         {!item || item?.quantity === 0 ? (
-          <TouchableOpacity style={style.amountButton} onPress={handleAdd}>
-            <Text style={style.amountButtonText}>+</Text>
+          <TouchableOpacity
+            className="size-8 rounded-2xl items-center justify-center"
+            onPress={handleAdd}
+          >
+            <Text className="text-lg">+</Text>
           </TouchableOpacity>
         ) : (
           <>
-            <TouchableOpacity style={style.amountButton} onPress={handleDecr}>
-              <Text style={style.amountButtonText}>-</Text>
+            <TouchableOpacity
+              className="size-8 rounded-2xl items-center justify-center"
+              onPress={handleDecr}
+            >
+              <Text className="text-lg">-</Text>
             </TouchableOpacity>
-            <Text style={style.amountText}>{item?.quantity ?? 0}</Text>
-            <TouchableOpacity style={style.amountButton} onPress={handleIncr}>
-              <Text style={style.amountButtonText}>+</Text>
+            <Text className="text-lg font-bold">{item?.quantity ?? 0}</Text>
+            <TouchableOpacity
+              className="size-8 rounded-2xl items-center justify-center"
+              onPress={handleIncr}
+            >
+              <Text className="text-lg">+</Text>
             </TouchableOpacity>
           </>
         )}
@@ -62,15 +73,17 @@ function ProductCard({ article }: { article: Product }) {
 
 function ProductList({ products }: { products: Product[] }) {
   return (
-    <FlashList
-      renderItem={({ item }) => {
-        return <ProductCard article={item} />;
-      }}
-      keyExtractor={(product) => product.id.toString()}
-      data={products}
-      estimatedItemSize={100}
-      ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
-    />
+    <View className="flex-1">
+      <FlashList
+        renderItem={({ item }) => {
+          return <ProductCard article={item} />;
+        }}
+        keyExtractor={(product) => product.id.toString()}
+        data={products}
+        estimatedItemSize={100}
+        ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+      />
+    </View>
   );
 }
 
@@ -81,17 +94,12 @@ function CartButton() {
   const handlePress = () => navigation.navigate("Cart");
 
   return (
-    <TouchableOpacity
+    <Pressable
+      className="items-center justify-center bg-black p-2"
       onPress={handlePress}
-      style={{
-        padding: 10,
-        backgroundColor: "black",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
     >
-      <Text style={{ color: "white" }}>Voir mon panier</Text>
-    </TouchableOpacity>
+      <Text className="color-white">Voir mon panier</Text>
+    </Pressable>
   );
 }
 
@@ -101,51 +109,16 @@ export default function ProductPage() {
 
   if (!items) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <SafeAreaView className="flex-1 justify-center items-center">
         <Text>Please wait while we fetch the products...</Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={style.mainContainer}>
+    <SafeAreaView className="flex-1">
       <ProductList products={items.data.at(0)!.products} />
       {cart.items.length > 0 && <CartButton />}
-    </View>
+    </SafeAreaView>
   );
 }
-
-const style = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    padding: 8,
-    backgroundColor: "light-gray",
-  },
-  productContainer: {
-    padding: 16,
-    flexDirection: "row",
-    backgroundColor: "white",
-    borderRadius: 4,
-  },
-  amountButton: {
-    width: 30,
-    height: 30,
-    backgroundColor: "#ffa726",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  amountButtonText: {
-    color: "#fff",
-    fontSize: 18,
-  },
-  amountText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginHorizontal: 16,
-  },
-  productAmount: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});
