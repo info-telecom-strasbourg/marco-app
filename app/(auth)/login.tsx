@@ -5,6 +5,8 @@ import {
   Text,
   TextInput,
   ToastAndroid,
+  View,
+  Image,
 } from "react-native";
 import { useState } from "react";
 import { useAuth } from "@/auth/useAuth";
@@ -60,6 +62,7 @@ function LoginForm() {
 export default function AuthLogin() {
   return (
     <SafeAreaView style={styles.container}>
+      <Image source={require("../../assets/PRTS.png")} />
       <LoginForm />
     </SafeAreaView>
   );
@@ -68,6 +71,7 @@ export default function AuthLogin() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: 40,
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
