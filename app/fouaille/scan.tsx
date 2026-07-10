@@ -5,10 +5,13 @@ import {
 } from "expo-camera";
 import { useRouter } from "expo-router";
 import { Button, Platform, Text, View, StyleSheet } from "react-native";
+import { useIsFocused } from '@react-navigation/native';
+
 
 export default function ScanPage() {
   const [permission, requestPermission] = useCameraPermissions();
   const router = useRouter();
+  const isFocused = useIsFocused();
 
   if (!permission) {
     return (
@@ -42,7 +45,7 @@ export default function ScanPage() {
     } catch {}
   }
 
-  return (
+  return ( isFocused && 
     <View className="flex-1 justify-center items-center">
       <CameraView
         facing={"back"}
@@ -62,6 +65,6 @@ const style = StyleSheet.create({
     left: 200,
     width: 150,
     height: 150,
-    boxShadow: "0 0 0 9999px rgba(0, 0, 255, 0.6)",
+    boxShadow: "0 0 0 9999pxé1èèùù rgba(0, 0, 255, 0.6)",
   },
 });
