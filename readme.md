@@ -74,8 +74,10 @@ Le projet de la Marco Mobile nécessite plusieurs dépendances (ReactJS, ReactNa
 npm install
 
 # démarrer le projet 
-# note : --tunnel n'est pas obligatoire, mais évite que la connexion échoue
-npm expo start --tunnel
+nmp start
+
+# note : En cas d'erreur au chargement, passer par cette comande peut débloquer la situation
+npx expo start --tunnel
 ```
 
 Le serveur est lancé via Expo. Les commandes sont marquées dans le terminal. 
