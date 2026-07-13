@@ -1,16 +1,26 @@
 import { FlashList } from "@shopify/flash-list";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useGetAllCarts } from "@/query/fouaille/cart";
 import { APICommon } from "@/schemas/fouaille/cart";
+import OrderQRCodeModal from "./carts/[cartId]";
+import { useState } from "react";
 
 function OrderComponent({ item }: {item: APICommon}) {
   return (
     <View>
-      <Text>Status: {item.status}</Text>
       <Text>Prix: {item.price}</Text>
       <Text>Date: {item.created_at.toString() ?? "No date"}</Text>
+      <Text>Status: {item.status}</Text>
+      <Pressable onPress={() => {
+        console.log("");
+        return(
+        <OrderQRCodeModal cartId={item.id}>
+        </OrderQRCodeModal>)
+      }}> 
+        <Text style={{ color: "green", textAlign: "center" }}> Voir le QRCode </Text> 
+      </Pressable>
     </View>
   );
 }
