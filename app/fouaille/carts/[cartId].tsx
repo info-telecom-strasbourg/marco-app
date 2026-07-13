@@ -1,5 +1,4 @@
 import { useGetCart, useCompleteCart } from "@/query/fouaille/cart";
-import { useLocalSearchParams } from "expo-router";
 import {
   Alert,
   Modal,
@@ -13,20 +12,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function OrderDetailModal({
   visible,
   setVisible,
+  cartId,
 }: {
-  cartId: number;
   visible: boolean;
   setVisible: (_: boolean) => void;
+  cartId: number;
 }) {
-  const { cartId } = useLocalSearchParams();
 
-  const { isFetching, isSuccess, data } = useGetCart(
-    parseInt(cartId as string),
-  );
-  const { mutate: validate } = useCompleteCart(parseInt(cartId as string));
+  const { isFetching, isSuccess, data } = useGetCart(cartId);
+  const { mutate: validate } = useCompleteCart(cartId);
 
   if (isFetching) {
-    return <Text>Please wait, we are retrieving the informations</Text>;
+    return <Text className="color ">Please wait, we are retrieving the informations</Text>;
   }
 
   if (!isSuccess) {
@@ -37,8 +34,8 @@ export default function OrderDetailModal({
     validate(undefined, {
       onSuccess: () => {
         Alert.alert("Commande validée avec succès", "", [{ text: "OK" }]);
-
         ToastAndroid.show(`Commande validée avec succès`, 2);
+        setVisible(false);
       },
     });
   };
