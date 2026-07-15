@@ -18,7 +18,6 @@ export default function OrderDetailModal({
   setVisible: (_: boolean) => void;
   cartId: number;
 }) {
-
   const { isFetching, isSuccess, data } = useGetCart(cartId);
   const { mutate: validate } = useCompleteCart(cartId);
 

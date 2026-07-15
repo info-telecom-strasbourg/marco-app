@@ -6,15 +6,15 @@ import {
 import { useRouter } from "expo-router";
 import { Button, Platform, Text, View, StyleSheet } from "react-native";
 import { useIsFocused } from '@react-navigation/native';
-import OrderDetailModal from "./carts/[cartId]";
+import OrderDetailModal from "../../src/components/fouaille/[cartId]";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function ScanPage() {
   const [permission, requestPermission] = useCameraPermissions();
-  const [visible, setVisible] = useState<boolean>(true)
-  const router = useRouter();
+  const [cartId, setCartId] = useState<number>();
+  const [visible, setVisible] = useState<boolean>(true);
   const isFocused = useIsFocused();
 
   if (!permission) {
@@ -43,17 +43,8 @@ export default function ScanPage() {
 
     try {
       const { cartId } = JSON.parse(data);
-      if (cartId) {
-        console.log('panier : ${cartId}');
-        return (
-            <OrderDetailModal
-              visible = { visible }
-              setVisible = { setVisible }
-              cartId = { cartId }
-            >
-            </OrderDetailModal>
-        );
-      }
+      setCartId(cartId);
+      setVisible(true);
     } catch {
           console.log("wrong qrcode");
     }
@@ -70,6 +61,15 @@ export default function ScanPage() {
         }}>
         <View style={style.hole}></View>
       </CameraView>
+      {
+        visible && 
+        <OrderDetailModal
+          visible = { visible }
+          setVisible = { setVisible }
+          cartId = { cartId! }
+        >
+        </OrderDetailModal>
+      }
     </View>
   );
 }
