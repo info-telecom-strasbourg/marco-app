@@ -4,29 +4,30 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useGetAllCarts } from "@/query/fouaille/cart";
 import { APICommon } from "@/schemas/fouaille/cart";
-import OrderQRCodeModal from "./carts/[cartId]";
+import OrderQRCodeModal from "../../src/components/(home)/[cartId]";
 import { useState } from "react";
 
-function OrderComponent({ item }: {item: APICommon}) {
+function OrderComponent({ item, setSelected }: { item: APICommon, setSelected: (_:APICommon) => void }) {
+
+
   return (
     <View>
-      <Text>Prix: {item.price}</Text>
-      <Text>Date: {item.created_at.toString() ?? "No date"}</Text>
-      <Text>Status: {item.status}</Text>
-      <Pressable onPress={() => {
-        console.log("");
-        return(
-        <OrderQRCodeModal cartId={item.id}>
-        </OrderQRCodeModal>)
-      }}> 
-        <Text style={{ color: "green", textAlign: "center" }}> Voir le QRCode </Text> 
+      <Pressable onPress={() => setSelected(item)}>
+        <Text>Prix: {item.price}</Text>
+        <Text>Date: {item.created_at.toString() ?? "No date"}</Text>
+        <Text>Status: {item.status}</Text>
+        <Text style={{ color: "green", textAlign: "center" }}> Voir le QRCode </Text>
       </Pressable>
+
+
+
     </View>
   );
 }
 
 export default function HistoryScreen() {
-  const { isFetching, data, error ,isSuccess } = useGetAllCarts();
+  const [selected, setSelected] = useState<APICommon | null>(null);
+  const { isFetching, data, error, isSuccess } = useGetAllCarts();
 
   if (isFetching) {
     return (
@@ -58,7 +59,13 @@ export default function HistoryScreen() {
 
   return (
     <SafeAreaView className="flex-1">
-      <FlashList data={history} renderItem={OrderComponent} />
+      <FlashList data={history} extraData= {setSelected} renderItem={({item}) => <OrderComponent item = {item} setSelected= {setSelected} /> } />
+
+      {
+        selected &&
+        <OrderQRCodeModal data={selected} close={() => setSelected(null)} />
+      }
+
     </SafeAreaView>
   );
 }
