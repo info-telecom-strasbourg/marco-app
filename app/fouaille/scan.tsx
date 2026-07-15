@@ -3,18 +3,15 @@ import {
   CameraView,
   useCameraPermissions,
 } from "expo-camera";
-import { useRouter } from "expo-router";
 import { Button, Platform, Text, View, StyleSheet } from "react-native";
 import { useIsFocused } from '@react-navigation/native';
 import OrderDetailModal from "../../src/components/fouaille/[cartId]";
 import { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-
 
 export default function ScanPage() {
   const [permission, requestPermission] = useCameraPermissions();
   const [cartId, setCartId] = useState<number>();
-  const [visible, setVisible] = useState<boolean>(true);
+  const [visible, setVisible] = useState<boolean>(false);
   const isFocused = useIsFocused();
 
   if (!permission) {
@@ -35,6 +32,9 @@ export default function ScanPage() {
   }
 
   async function scanCallback({ data }: BarcodeScanningResult) {
+    if (visible) {
+     return;
+    }
 
     // https://docs.expo.dev/versions/latest/sdk/camera/#dismissscanner
     if (Platform.OS === "ios") {
@@ -45,12 +45,13 @@ export default function ScanPage() {
       const { cartId } = JSON.parse(data);
       setCartId(cartId);
       setVisible(true);
+      console.log("qrcode scanné !");
     } catch {
           console.log("wrong qrcode");
     }
   }
 
-  return ( isFocused && 
+  return ( isFocused &&
     <View className="flex-1 justify-center items-center">
       <CameraView
         facing={"back"}

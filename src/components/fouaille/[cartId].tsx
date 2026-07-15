@@ -34,9 +34,9 @@ export default function OrderDetailModal({
       onSuccess: () => {
         Alert.alert("Commande validée avec succès", "", [{ text: "OK" }]);
         ToastAndroid.show(`Commande validée avec succès`, 2);
-        setVisible(false);
       },
     });
+    setVisible(false);
   };
 
   return (
