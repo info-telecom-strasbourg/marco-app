@@ -30,13 +30,20 @@ export default function OrderDetailModal({
   }
 
   const handlePaiement = () => {
+    
     validate(undefined, {
-      onSuccess: () => {
+      onSuccess: (validation) => {
+        setVisible(false);
+        if (!validation.ok)
+        {
+          Alert.alert(`Commande invalide : ${validation.current}`);
+          return;
+        }
         Alert.alert("Commande validée avec succès", "", [{ text: "OK" }]);
         ToastAndroid.show(`Commande validée avec succès`, 2);
+        console.log("JSON de validation :", validation);
       },
     });
-    setVisible(false);
   };
 
   return (
@@ -47,7 +54,6 @@ export default function OrderDetailModal({
         onRequestClose={() => setVisible(false)}
       >
         <Text>Panier #{cartId}</Text>
-
         <Text>Effectué le {data!.data.created_at.toString()}</Text>
         <Text>Prix panier: {data!.data.price}</Text>
 
@@ -60,11 +66,22 @@ export default function OrderDetailModal({
           }}
           className="p-4"
         >
-          <Pressable onPress={handlePaiement}>
-            <Text style={{ color: "white", textAlign: "center" }}>
-              Valider la commande
-            </Text>
-          </Pressable>
+          {
+            (data.data.status != "payed") && 
+            <Pressable onPress={handlePaiement}>
+              <Text style={{ color: "white", textAlign: "center" }}>
+                Valider la commande
+              </Text>
+            </Pressable>
+          }
+          {
+            (data.data.status == "payed") && 
+            <Pressable onPress={() => setVisible(false)}>
+              <Text style={{ color: "white", textAlign: "center" }}>
+                La commande a déjà été validée. 
+              </Text>
+            </Pressable>
+          }
         </View>
       </Modal>
     </SafeAreaView>
