@@ -36,12 +36,12 @@ export default function OrderDetailModal({
         setVisible(false);
         if (!validation.ok)
         {
-          Alert.alert(`Commande invalide : ${validation.current}`);
+          Alert.alert(`Commande invalide : fonds insuffisants`);
+          ToastAndroid.show(`Commande invalide : fonds insuffisants`, 2);
           return;
         }
         Alert.alert("Commande validée avec succès", "", [{ text: "OK" }]);
         ToastAndroid.show(`Commande validée avec succès`, 2);
-        console.log("JSON de validation :", validation);
       },
     });
   };
