@@ -156,8 +156,8 @@ export default function ProductPage() {
             <ProductList products={items.data.at(product.id - 1)!.products} />
           </SafeAreaView>
         ))}
-        {cart.items.length > 0 && <CartButton />}
       </ScrollView>
+      {cart.items.length > 0 && <CartButton />}
     </SafeAreaView>
   );
 }

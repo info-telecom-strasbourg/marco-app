@@ -9,6 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import QRCode from 'react-native-qrcode-svg';
 import { APICommon } from "@/schemas/fouaille/cart";
 
+
 export default function OrderQRCodeModal({
   data: orderData,
   close,
@@ -16,8 +17,8 @@ export default function OrderQRCodeModal({
   data: APICommon;
   close:() => void;
 }) {
-  const { isFetching, isSuccess, data } = useGetCart(orderData.id);
 
+  const { isFetching, isSuccess, data } = useGetCart(orderData.id);
   if (isFetching) {
     return <Text>Please wait, we are retrieving the informations</Text>;
   }
@@ -35,13 +36,15 @@ export default function OrderQRCodeModal({
       >
         <Text>Panier #{orderData.id}</Text>
 
-        <Text>Effectué le {data!.data.created_at.toString()}</Text>
+        <Text>Effectué le {data.data.created_at.toString()}</Text>
         <Text>Prix panier: {data!.data.price}</Text>
 
         <Text>QRCode : </Text>
+        <QRCode 
+          size = { 200 } 
+          value = { `{ "cartId": ${orderData.id} }`} 
+        />
 
-        <QRCode value ={ `{ "cartId": ${orderData.id} }` }/>
-        
         <View
           style={{
             padding: 12,

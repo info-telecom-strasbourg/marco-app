@@ -34,7 +34,7 @@ export default function OrderDetailModal({
     validate(undefined, {
       onSuccess: (validation) => {
         setVisible(false);
-        if (!validation.ok)
+        if (!validation.OK)
         {
           Alert.alert(`Commande invalide : fonds insuffisants`);
           ToastAndroid.show(`Commande invalide : fonds insuffisants`, 2);
@@ -61,22 +61,21 @@ export default function OrderDetailModal({
           style={{
             padding: 12,
             width: "100%",
-            backgroundColor: "green",
             borderRadius: "8px",
           }}
           className="p-4"
         >
           {
             (data.data.status != "payed") && 
-            <Pressable onPress={handlePaiement}>
-              <Text style={{ color: "white", textAlign: "center" }}>
+            <Pressable style={{ backgroundColor: "green" }} onPress={handlePaiement}>
+              <Text style={{ backgroundColor: "green", color: "white", textAlign: "center" }}>
                 Valider la commande
               </Text>
             </Pressable>
           }
           {
             (data.data.status == "payed") && 
-            <Pressable onPress={() => setVisible(false)}>
+            <Pressable style={{ backgroundColor: "red" }} onPress={() => setVisible(false)}>
               <Text style={{ color: "white", textAlign: "center" }}>
                 La commande a déjà été validée. 
               </Text>

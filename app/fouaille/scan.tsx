@@ -45,7 +45,6 @@ export default function ScanPage() {
       const { cartId } = JSON.parse(data);
       setCartId(cartId);
       setVisible(true);
-      console.log("qrcode scanné !");
     } catch {
           console.log("wrong qrcode");
     }
