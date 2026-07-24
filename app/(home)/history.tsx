@@ -5,9 +5,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetAllCarts } from "@/query/fouaille/cart";
 import { APICommon } from "@/schemas/fouaille/cart";
 import OrderQRCodeModal from "../../src/components/(home)/[cartId]";
-import { useState, useCallback, useRef } from "react";
-import { useFocusEffect } from '@react-navigation/native'
-import { useQueryClient } from '@tanstack/react-query'
+import { useState } from "react";
+import { useRefreshOnFocus } from "@/query/refreshOnFocus";
 
 function OrderComponent({ item, setSelected }: { item: APICommon, setSelected: (_:APICommon) => void }) {
   return (
@@ -22,30 +21,13 @@ function OrderComponent({ item, setSelected }: { item: APICommon, setSelected: (
   );
 }
 
-export function useRefreshOnFocus() {
-  const queryClient = useQueryClient()
-  const firstTimeRef = useRef(true)
-
-  useFocusEffect(
-    useCallback(() => {
-      if (firstTimeRef.current) {
-        firstTimeRef.current = false
-        return
-      }
-      // refetch useGetAllCarts query
-      queryClient.refetchQueries({
-        queryKey: ['carts'],
-        stale: true,
-        type: 'active',
-      })
-    }, [queryClient]),
-  )
-}
+/* 
+*/ 
 
 export default function HistoryScreen() {
   const [selected, setSelected] = useState<APICommon | null>(null);
   const { isFetching, data, error, isSuccess } = useGetAllCarts();
-  useRefreshOnFocus();
+  useRefreshOnFocus('carts');
 
   if (isFetching) {
     return (
@@ -74,8 +56,8 @@ export default function HistoryScreen() {
       </SafeAreaView>
     );
   }
-  const reversedHistory = [...history].reverse(); // last cart first
-
+  const reversedHistory = history.toReversed(); // last cart first
+  
   return (
     <SafeAreaView className="flex-1">
       <FlashList data={reversedHistory} extraData= {setSelected} renderItem={({item}) => <OrderComponent item = {item} setSelected= {setSelected} /> } />

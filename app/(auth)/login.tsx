@@ -14,8 +14,8 @@ import { useAuth } from "@/auth/useAuth";
 function LoginForm() {
   const { signIn } = useAuth();
 
-  const [username, setUsername] = useState<string>("root@admin.dev");
-  const [password, setPassword] = useState<string>("password");
+  const [username, setUsername] = useState<string>("email@email.com");
+  const [password, setPassword] = useState<string>("test");
 
   function onLoginPress() {
     ToastAndroid.show(`Log in using credentials: ${username} - ${password}`, 2);

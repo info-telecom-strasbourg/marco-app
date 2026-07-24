@@ -6,11 +6,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { FlashList } from "@shopify/flash-list";
-
 import type { Product } from "@/schemas/fouaille/product";
-
 import { useRouter } from "expo-router";
 import { useCartStore } from "@/store/cart";
 import { useGetProducts } from "@/query/fouaille/products";
@@ -147,13 +144,12 @@ export default function ProductPage() {
       </SafeAreaView>
     );
   return (
-    
     <SafeAreaView className="flex-1 flex-col">
       <ScrollView>
-        { product_types.data.map( product => (
-          <SafeAreaView key= {product.id - 1} className="flex-1 flex-col">
+        {product_types.data.map( product => (
+          <SafeAreaView key= {product.id} className="flex-1 flex-col">
             <Text className="text-4xl font-bold underline"> {product.type} </Text>
-            <ProductList products={items.data.at(product.id - 1)!.products} />
+            <ProductList products={items.data.at(product.id - 2)!.products} />
           </SafeAreaView>
         ))}
       </ScrollView>

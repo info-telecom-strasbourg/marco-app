@@ -30,11 +30,10 @@ export default function OrderDetailModal({
   }
 
   const handlePaiement = () => {
-    
     validate(undefined, {
       onSuccess: (validation) => {
         setVisible(false);
-        if (!validation.OK)
+        if (!validation.ok)
         {
           Alert.alert(`Commande invalide : fonds insuffisants`);
           ToastAndroid.show(`Commande invalide : fonds insuffisants`, 2);

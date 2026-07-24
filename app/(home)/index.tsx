@@ -8,6 +8,7 @@ import { useAuth } from "@/auth/useAuth";
 import { useGetBalance } from "@/query/fouaille/balance";
 import { useGetAllOrders } from "@/query/fouaille/order";
 import type { Order } from "@/schemas/fouaille/order";
+import { useRefreshOnFocus } from "@/query/refreshOnFocus";
 
 function OrderComponent({ item }: { item: Order }) {
   return (
@@ -22,6 +23,8 @@ function OrderComponent({ item }: { item: Order }) {
 export default function HomePage() {
   const userBalance = useGetBalance();
   const orderHistory = useGetAllOrders(0);
+  useRefreshOnFocus('balance');
+  useRefreshOnFocus('orders')
 
   const router = useRouter();
   const { signOut } = useAuth();

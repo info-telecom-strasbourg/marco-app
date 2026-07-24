@@ -1,4 +1,4 @@
-import { useGetCart, useCompleteCart } from "@/query/fouaille/cart";
+import { useGetCart } from "@/query/fouaille/cart";
 import {
   Modal,
   Pressable,
@@ -40,7 +40,7 @@ export default function OrderQRCodeModal({
         <Text>Prix panier: {data!.data.price}</Text>
 
         <Text>QRCode : </Text>
-        <QRCode 
+        <QRCode
           size = { 200 } 
           value = { `{ "cartId": ${orderData.id} }`} 
         />

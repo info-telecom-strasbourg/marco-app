@@ -66,7 +66,7 @@ function ProductCard({ item }: { item: CartItem }) {
 
 export default function CartPage() {
   const store = useCartStore();
-  const { mutate } = useSubmitCart();
+  const { mutate:submit } = useSubmitCart();
 
   const cartPrice = store.items.reduce(
     (acc, item) => (acc += item.product.price * item.quantity),
@@ -75,7 +75,7 @@ export default function CartPage() {
 
   // Prevent errors with floating point representation
   const formattedPrice = Math.round(cartPrice * 100) / 100;
-  const handleCheckout = () => mutate(store);
+  const handleCheckout = () => submit(store);
 
   if (store.items.length === 0) {
     return (
